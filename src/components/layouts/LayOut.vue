@@ -1,10 +1,35 @@
 <template>
-    <div class="">
-    </div>
-    <ElButton type="primary">1</ElButton>
+  <el-container style="width:100vw;height: 100vh;">
+    <el-header v-if="props.topNav" style="padding: 0;width: 100%;height: 80px;">
+      <TopNav/>
+    </el-header>
+    <el-container>
+      <el-side v-if="props.sideNav" style="background-color: aquamarine;">
+        <SideNav/>
+      </el-side>
+      <el-main style="background-color: antiquewhite;">
+        1
+      </el-main>
+    </el-container>
+
+  </el-container>
 </template>
 <script setup lang="ts">
-import { ElButton } from 'element-plus';
+import { ElContainer } from 'element-plus';
+import TopNav from './navbars/TopNav.vue';
+import SideNav from './navbars/SideNav.vue';
 
-
+const props = defineProps({
+  topNav: {
+    type: Boolean,
+    default: true
+  },
+  sideNav: {
+    type: Boolean,
+    default: true
+  }
+})
 </script>
+
+<style>
+</style>

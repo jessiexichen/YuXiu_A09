@@ -1,0 +1,79 @@
+<template>
+  <div class="TopNav">
+    <div class="logoBlock">
+        <img
+          class="logo"
+          src="@/assets/logo2.png"
+        >
+        <div class="logo-title">
+          <text>毓秀语音</text>
+          <text>教学平台</text>
+        </div>
+    </div>
+    <div class="navBlock">
+      <div
+       class="blocks"
+       v-for="item in navPages"
+       :key="item.name"
+       @click="handleNav(item.url)"
+      >
+      {{item.name}}
+      </div>
+    </div>
+    <div style="display:flex; align-items: center;">
+      <LoginButton/>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import router from '@/router';
+import type { navPage } from '@/types/navBar';
+import LoginButton from './features/LoginButton.vue';
+
+function handleNav(url: string) {
+  router.push(url)
+}
+</script>
+
+<script lang="ts">
+  export const navPages : navPage[] = [
+    {name: "首页",url: "/home"},{name:"产品简介",url: "/home/profile"},
+    {name:"使用教程",url: "/home/tutor"},{name: "功能介绍",url: "/home/introduce"}
+  ]
+</script>
+
+<style lang="scss">
+.TopNav {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: #eff8ff;
+  gap: 80px;
+
+  .logoBlock {
+    display: block;
+    position: relative;
+    left: 5%;
+
+    font-size: 0.9rem;
+    .logo {
+      position: relative;
+      height: 50px;
+    }
+    .logo-title {
+        width: 100%;
+        bottom: 0;
+        text-align: center;
+    }
+  }
+
+  .navBlock {
+    width: 1000px;
+    display: flex;
+    justify-content:space-evenly;
+    align-items: center;
+  }
+}
+</style>
