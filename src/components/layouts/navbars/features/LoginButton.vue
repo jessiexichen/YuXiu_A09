@@ -1,21 +1,30 @@
 <template>
-  <div class="loginButton">
+  <div class="loginButton" @click="handleTab()">
     登录
   </div>
 </template>
 
 <script setup lang="ts">
+import router from '@/router';
+
+function handleTab() {
+  router.push("/login")
+}
 </script>
 <style lang="scss">
 .loginButton {
-$buttonHeight: 50px;
+$buttonHeight: 40px;
 
   border: 1px solid #1975FF;
   border-radius: 21px;
-  width: 70px;
+  width: 80px;
   height: $buttonHeight;
 
+  color:#1975FF;
+  font-weight: bold;
   text-align: center;
   line-height: $buttonHeight;
+
+  cursor: pointer;
 }
 </style>

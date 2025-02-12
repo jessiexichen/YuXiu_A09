@@ -20,7 +20,7 @@
       {{item.name}}
       </div>
     </div>
-    <div style="display:flex; align-items: center;">
+    <div style="display:flex; align-items: center;position: absolute;right: 2%;top: 30%;">
       <LoginButton/>
     </div>
   </div>
@@ -64,16 +64,22 @@ function handleNav(url: string) {
     }
     .logo-title {
         width: 100%;
-        bottom: 0;
+        bottom: 3%;
         text-align: center;
+        position: absolute;
     }
   }
 
   .navBlock {
     width: 1000px;
     display: flex;
-    justify-content:space-evenly;
+    justify-content: space-evenly;
     align-items: center;
+
+    .blocks {
+      font-weight: bold;
+      cursor: pointer;
+    }
   }
 }
 </style>

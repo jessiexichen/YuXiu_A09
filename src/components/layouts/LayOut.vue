@@ -1,10 +1,10 @@
 <template>
   <el-container style="width:100vw;height: 100vh;">
-    <el-header v-if="props.topNav" style="padding: 0;width: 100%;height: 80px;">
+    <el-header v-if="props.topNav" style="padding: 0;width: 100%;height: 70px;">
       <TopNav/>
     </el-header>
     <el-container>
-      <el-side v-if="props.sideNav" style="background-color: aquamarine;">
+      <el-side v-if="props.sideNav" style="background-color: #fefefe;">
         <SideNav/>
       </el-side>
       <el-main style="background-color: antiquewhite;">
