@@ -3,12 +3,8 @@
     <div class="logoBlock">
         <img
           class="logo"
-          src="@/assets/logo2.png"
+          src="@/assets/logo3.png"
         >
-        <div class="logo-title">
-          <text>毓秀语音</text>
-          <text>教学平台</text>
-        </div>
     </div>
     <div class="navBlock">
       <div
@@ -62,7 +58,7 @@ function handleNav(url: string) {
     font-size: 0.9rem;
     .logo {
       position: relative;
-      height: 50px;
+      width: 180px;
     }
     .logo-title {
         width: 100%;

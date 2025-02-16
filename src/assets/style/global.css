@@ -1,8 +1,0 @@
-@import './vueDefault.css';
-/*
-全局css设置 用于设置如字体等
-*/
-#app {
-    font-family: PingFang SC,HarmonyOS_Regular,Helvetica Neue,Microsoft YaHei,sans-serif!important;
-    font-size: normal;
-}

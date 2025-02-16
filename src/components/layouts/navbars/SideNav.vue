@@ -15,6 +15,12 @@
 import router from '@/router';
 import { useRoute } from 'vue-router';
 
+function isActive(url: string) {
+  if (useRoute().path === url) {
+    return "active";
+  }
+  return "";
+}
 </script>
 
 <script lang="ts">
@@ -25,13 +31,6 @@ const childPages = [
   { name: "有声课件制作", url: "/ppt-creation" },
   { name: "个人中心", url: "/user-center" },
 ];
-
-function isActive(url: string) {
-  if (useRoute().path === url) {
-    return "active";
-  }
-  return "";
-}
 </script>
 
 <style lang="scss">

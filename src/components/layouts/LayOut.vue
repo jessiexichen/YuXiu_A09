@@ -7,7 +7,7 @@
       <el-side v-if="props.sideNav" style="background-color: #fefefe;border: 1px solid #d1d9e0;">
         <SideNav />
       </el-side>
-      <el-main style="background-color: #eff8ff;">
+      <el-main style="background-color: #eff8ff;display: flex;" class="main">
         <slot />
       </el-main>
     </el-container>
