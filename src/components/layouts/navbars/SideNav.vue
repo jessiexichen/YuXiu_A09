@@ -8,7 +8,7 @@
     >
     {{ item.name }}
   </div>
-  </div>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -19,12 +19,11 @@ import { useRoute } from 'vue-router';
 
 <script lang="ts">
 const childPages = [
-  { name: "产品&服务", url: "/home/product" },
-  { name: "语音合成", url: "/home/synthesize" },
-  { name: "个性化语音", url: "/home/specialize" },
-  { name: "构筑声音", url: "/home/build" },
-  { name: "有声课件制作", url: "/home/ppt" },
-  { name: "个人中心", url: "/home/profile" },
+  { name: "产品&服务", url: "/home" ,descrip: "系统语音教学 个性化语音服务"},
+  { name: "语音合成", url: "/text-to-speech" },
+  { name: "构筑声音", url: "/new-voice" },
+  { name: "有声课件制作", url: "/ppt-creation" },
+  { name: "个人中心", url: "/user-center" },
 ];
 
 function isActive(url: string) {
@@ -39,11 +38,11 @@ function isActive(url: string) {
 .SideNav {
   $blockHeight: 70px;
   background-color: rgb(255,255, 255);
-  width: 200px;
+  width: 150px;
 
   .block {
     cursor: pointer;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1.4px solid #f3f4f6;
     font-weight: bold;
 
     text-align: center;

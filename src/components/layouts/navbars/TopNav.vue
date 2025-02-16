@@ -51,6 +51,8 @@ function handleNav(url: string) {
   height: 100%;
   background-color: #eff8ff;
   gap: 80px;
+  border: 1px solid #d1d9e0;
+  border-radius: 9px;
 
   .logoBlock {
     display: block;

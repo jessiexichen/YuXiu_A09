@@ -1,7 +1,5 @@
 <template>
-  <LayOut :side-nav="false">
-    <div></div>
-  </LayOut>
+  <LayOut></LayOut>
 </template>
 <script setup lang="ts">
 import LayOut from '@/components/layouts/LayOut.vue';
