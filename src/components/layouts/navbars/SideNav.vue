@@ -15,12 +15,14 @@
 import router from '@/router';
 import { useRoute } from 'vue-router';
 
+
 function isActive(url: string) {
   if (useRoute().path === url) {
     return "active";
   }
-  return "";
+  else return "";
 }
+
 </script>
 
 <script lang="ts">
@@ -48,10 +50,10 @@ const childPages = [
     width: 100%;
     height: $blockHeight;
     line-height: $blockHeight;
-
-    .active {
-      background-color: #f0f4fd;
-    }
+  }
+  .active {
+      color: #1975ff;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.3), -2px -2px 6px rgba(255,255,255,0.8);
   }
 
 }

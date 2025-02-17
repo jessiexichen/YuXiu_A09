@@ -2,15 +2,35 @@
   <LayOut :side-nav="false">
     <div class="card">
       <div class="card-block titleBlock">
-        <div class="title">邮箱登录</div>
-        <div class="title">账号密码登录</div>
+        <div
+          class="title" @click="changeLogType('email')"
+          :class="loginType === 'email' ? 'active': undefined"
+        >
+          邮箱登录
+        </div>
+        <div
+          class="title" @click="changeLogType('account')"
+          :class="loginType === 'account' ? 'active' : undefined"
+        >
+          账号密码登录
+        </div>
       </div>
       <div class="card-block logo">
         <img src="@/assets/logo3.png" style="width: 150px;"/>
       </div>
-      <div class="card-block input">
-        <ElInput placeholder="请输入邮箱地址" v-model="email" />
-        <ElInput type="password" placeholder="请输入密码" v-model="password" :show-password="true" />
+      <div
+        v-if="loginType === 'email'"
+        class="card-block input"
+      >
+        <ElInput size="large" placeholder="请输入邮箱地址" v-model="email" />
+        <ElInput size="large" type="password" placeholder="请输入密码" v-model="password" :show-password="true" />
+      </div>
+      <div
+        v-else
+        class="card-block input"
+      >
+        <ElInput size="large" placeholder="请输入账号" v-model="account" />
+        <ElInput size="large" type="password" placeholder="请输入密码" v-model="password" :show-password="true" />
       </div>
       <div class="card-block initial">
         <ElCheckbox  v-model="initial" class="checkbox" />
@@ -22,9 +42,8 @@
         </div>
       </div>
       <div class="card-block function">
-        <ElButton type="primary" size="large" style="width: 100%;height: 45px;">登录</ElButton>
-        <div><a>去注册-></a></div>
-
+        <ElButton type="primary" size="large" style="width: 100%; height: 45px;">登录</ElButton>
+        <RouterLink to="/register">去注册-></RouterLink>
       </div>
     </div>
   </LayOut>
@@ -35,10 +54,13 @@ import { ElButton, ElInput } from 'element-plus';
 import { ElCheckbox } from 'element-plus';
 import { ref } from 'vue';
 
-const loginType: "email" | "password" = "email"
-
+const loginType = ref("email")
+function changeLogType(type: "email" | "account") {
+  loginType.value = type
+}
 const password = ref(undefined)
 const email = ref(undefined)
+const account = ref(undefined)
 const initial = ref(undefined)
 </script>
 
@@ -48,7 +70,7 @@ const initial = ref(undefined)
   left: 20%;
   top: 15%;
   width: 500px;
-  height: 560px;
+  height: 580px;
 
 
   @media screen and (max-width: 800px){
@@ -69,7 +91,17 @@ const initial = ref(undefined)
     position: relative;
     width: 80%;
     border-bottom: 2px solid #f6f7f8;
-    padding-bottom: 20px;
+    padding-bottom: 0px;
+    height: 60px;
+
+    .title {
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .active {
+      color:#457af7;
+      border-bottom: 2px solid #457af7;
+    }
   }
   .logo {
     display: flex;
