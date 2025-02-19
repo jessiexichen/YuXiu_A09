@@ -3,12 +3,13 @@
 全局css设置 用于设置如字体等
 */
 #app {
-    font-family: PingFang SC,HarmonyOS_Regular,Helvetica Neue,Microsoft YaHei,sans-serif!important;
+    font-family: Source Han Sans,PingFang SC,HarmonyOS_Regular,Helvetica Neue,Microsoft YaHei,sans-serif!important;
     font-size: normal;
+    color: #000000;
 }
 
 .card {
-    width: auto;
+    width: 80%;
     height: auto;
     display: flex;
     padding: 30px;
