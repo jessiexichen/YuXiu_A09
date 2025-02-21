@@ -21,6 +21,7 @@ const props = defineProps<Props>()
   font-family: Roboto;
   position: relative;
   padding: 10px 10px 10px 10px;
+  align-items: start;
   .title {
     width: 100%;
     font-size: 17px;

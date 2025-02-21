@@ -16,13 +16,38 @@
       <Card
         title="随机生成文本内容"
       >
-        <div>1</div>
+        <div style="width: 80%;display:flex;gap: 2%;overflow: hidden;">
+          <NormButton
+          v-for="(item, index) in contentType"
+          :key="index"
+          :font="item"
+        />
+        </div>
+      </Card>
+      <Card
+        title="输入文本内容"
+      >
+        <div
+          class="input-container"
+        >
+          <div style="height: 15%;">
+            1
+          </div>
+          <div style="height: 80%;">
+          </div>
+        </div>
       </Card>
     </div>
     <div class="container">
       <div class="title">
         生成语音
       </div>
+      <Card>
+        <DropDownSelector
+          :visible-selection="localLanguage"
+          :has-more="false"
+        />
+      </Card>
     </div>
   </LayOut>
 </template>
@@ -30,11 +55,17 @@
 import LayOut from '@/components/layouts/LayOut.vue';
 import Card from '@/components/card/CarD.vue';
 import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue';
+import NormButton from '@/components/button/normButton.vue';
+
 </script>
 
 <script lang="ts">
-const visibleLanguages = ["普通话", "英语", "法语", "俄语", "西班牙语"]
-const allLanguages = ["普通话", "英语", "法语", "俄语", "西班牙语", "阿拉伯语", "日语", "韩语"]
+const visibleLanguages = ["中文", "英语", "法语", "俄语", "西班牙语", "阿拉伯语"]
+const allLanguages = ["中文", "英语", "法语", "俄语", "西班牙语", "阿拉伯语", "日语", "韩语"]
+
+const contentType = ["诗歌", "新闻", "散文", "俗语"]
+
+const localLanguage = ["普通话", "广东", "四川", "上海", "郑州", "长沙", "天津", "闽南"]
 </script>
 
 <style lang="scss" scoped>
@@ -54,6 +85,17 @@ const allLanguages = ["普通话", "英语", "法语", "俄语", "西班牙语",
   }
 
   .card {
+    width: 92%;
+  }
+
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    width: 100%;
+    height: 250px;
+    border: 1px solid var(--el-border-color-light);
+    border-radius: 10px;
   }
 }
 
