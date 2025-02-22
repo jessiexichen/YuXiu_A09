@@ -112,14 +112,21 @@
       <Card
         title="调节音频"
       >
-        <div class="card-block" style="justify-content: center;align-items:center;">
+        <div class="card-block" style="justify-content: center;align-items:center;gap: 15px;">
           <el-button type="primary" style="width: 35px;height: 35px;border-radius: 100%;">
-            <el-icon><CaretRight /></el-icon>
+            <img src="@/assets/icons/begin.png" style="width: 1.9em;">
+            <!-- <img src="@/assets/icons/pause.png" style="width: 0.8em;"> -->
           </el-button>
-           00:07
+           <text style="line-height: 35px;">00:07</text>
            <el-slider style="width: 200px;"/>
-           00:15
-           <el-button type="primary" style="width: 100px;">更多声音</el-button>
+           <text style="line-height: 35px;">00:15</text>
+           <div style="display: flex;align-items: center;">
+            <img src="@/assets/icons/voice.png" style="width: 1.5em;height: 1.1em;" >
+          </div>
+           <el-button type="primary" style="width: 140px;">
+            <img src="@/assets/icons/：.png" style="width: 0.8em;height: 1.3em;" >
+            更多声音调节选项
+          </el-button>
         </div>
         <div class="card-block" style="justify-content: center;align-items:center;">
           选择音频格式
@@ -141,7 +148,7 @@ import LayOut from '@/components/layouts/LayOut.vue';
 import Card from '@/components/card/CarD.vue';
 import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue';
 import NormButton from '@/components/button/normButton.vue';
-import { ElInput, ElSwitch, ElButton, ElRadioGroup, ElIcon, ElSlider } from 'element-plus';
+import { ElInput, ElSwitch, ElButton, ElRadioGroup, ElSlider } from 'element-plus';
 import { ref } from 'vue';
 import lanConfig from '@/assets/constants';
 const text = ref("")
