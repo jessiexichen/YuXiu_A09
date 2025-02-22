@@ -8,9 +8,9 @@
         title="选择输入样本语言"
       >
         <DropDownSelector
-          :visible-selection="visibleLanguages"
+          :visible-selection="lanConfig.visibleLanguages"
           :has-more="true"
-          :all-selection="allLanguages"
+          :all-selection="lanConfig.allLanguages"
           style="width: 86%;"
         />
       </Card>
@@ -19,7 +19,7 @@
       >
         <div style="width: 80%;display:flex;gap: 2%;overflow: hidden;">
           <NormButton
-          v-for="(item, index) in contentType"
+          v-for="(item, index) in lanConfig.contentType"
           :key="index"
           :font="item"
         />
@@ -52,23 +52,23 @@
         <div class="card-block">
           <div class="block-title">语言</div>
           <DropDownSelector
-            :visible-selection="visibleLanguages"
+            :visible-selection="lanConfig.visibleLanguages"
             :has-more="true"
-            :all-selection="allLanguages"
+            :all-selection="lanConfig.allLanguages"
             style="width: 90%;"
           />
         </div>
         <div class="card-block" style="padding-right: 0;">
           <div class="block-title">方言</div>
           <DropDownSelector
-            :visible-selection="localLanguage"
+            :visible-selection="lanConfig.localLanguage"
             :has-more="false"
           />
         </div>
         <div class="card-block">
           <div class="block-title">风格</div>
           <DropDownSelector
-            :visible-selection="langType"
+            :visible-selection="lanConfig.langType"
             :has-more="false"
           />
         </div>
@@ -143,21 +143,14 @@ import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue
 import NormButton from '@/components/button/normButton.vue';
 import { ElInput, ElSwitch, ElButton, ElRadioGroup, ElIcon, ElSlider } from 'element-plus';
 import { ref } from 'vue';
-
+import lanConfig from '@/assets/constants';
 const text = ref("")
+
 
 </script>
 
 <script lang="ts">
-const visibleLanguages = ["中文", "英语", "法语", "俄语", "西班牙语", "阿拉伯语"]
-const allLanguages = ["中文", "英语", "法语", "俄语", "西班牙语", "阿拉伯语", "德语", "希腊语",
-  "丹麦语", "捷克语", "意大利语", "芬兰语", "日语", "韩语", "泰语", "越南语", "南非语"]
 
-const contentType = ["诗歌", "新闻", "散文", "俗语"]
-
-const localLanguage = ["普通话", "广东", "四川", "上海", "郑州", "长沙", "天津", "闽南"]
-
-const langType = ["标准", "温柔", "稚嫩", "活泼", "激情", "风趣"]
 </script>
 
 <style lang="scss" scoped>
@@ -167,7 +160,9 @@ const langType = ["标准", "温柔", "稚嫩", "活泼", "激情", "风趣"]
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: 20px;
+  @media screen and (max-width: 1600px){
+    width: 750px;
+  }
   .title {
     margin-top: 20px;
     height: 5%;

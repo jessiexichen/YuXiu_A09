@@ -31,5 +31,6 @@ const props = defineProps({
 })
 </script>
 
-<style>
+<style lang="scss">
+
 </style>
