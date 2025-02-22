@@ -1,5 +1,5 @@
 <template>
-  <el-container style="width:100vw;height: 100vh;">
+  <el-container style="height: 100vh;">
     <el-header v-if="props.topNav" style="padding: 0;width: 100%;height: 70px;">
       <TopNav/>
     </el-header>

@@ -50,8 +50,7 @@
 </template>
 <script setup lang="ts">
 import LayOut from '@/components/layouts/LayOut.vue';
-import { ElButton, ElInput } from 'element-plus';
-import { ElCheckbox } from 'element-plus';
+import { ElButton, ElInput, ElCheckbox } from 'element-plus';
 import { ref } from 'vue';
 
 const loginType = ref("email")
