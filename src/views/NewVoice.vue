@@ -7,10 +7,10 @@
         <div class="card-block">
           <div class="block-title">语言</div>
           <DropDownSelector
-            :visible-selection="lanConfig.visibleLanguages"
+            :visible-selection="lanConfig.visibleLanguages1"
             :has-more="true"
             :all-selection="lanConfig.allLanguages"
-            style="width: 540px;"
+            style="width: 95%;border: none;"
           />
         </div>
         <div class="card-block" style="padding-right: 0;">
@@ -18,7 +18,7 @@
           <DropDownSelector
             :visible-selection="lanConfig.localLanguage"
             :has-more="false"
-            style="width: 540px;"
+            style="width: 94%;border: none;"
           />
         </div>
       </Card>

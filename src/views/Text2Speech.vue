@@ -33,10 +33,10 @@
           type="textarea"
           show-word-limit
           placeholder="请输入文本内容..."
-          maxlength="100"
+          maxlength="2000"
           resize="none"
           :clearable=true
-          input-style="height: 250px;width: 100%;"
+          input-style="height: 400px;width: 100%;"
           class="input-field"
         />
       </Card>

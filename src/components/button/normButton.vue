@@ -1,6 +1,6 @@
 <template>
   <button
-    style="margin: 2px;border: 1px solid black;"
+    style="margin: 2px;"
   >
     {{ props.font }}
   </button>
@@ -20,6 +20,7 @@ const props = defineProps({
     background-color: #EFF8FF;
     color: black;
     padding: 6px 15px;
+    border: none;
     border-radius: var(--el-border-radius-base);
     font-size: var(--el-font-size-base);
     cursor: pointer;

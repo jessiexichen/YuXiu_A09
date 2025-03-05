@@ -34,7 +34,7 @@ function handleNav(url: string) {
 
 <script lang="ts">
   export const navPages : navPage[] = [
-    {name: "首页",url: "/home"},{name:"产品简介",url: "/home/profile"},
+    {name:"产品简介",url: "/home/profile"},
     {name:"使用教程",url: "/home/tutor"},{name: "功能介绍",url: "/home/introduce"}
   ]
 </script>

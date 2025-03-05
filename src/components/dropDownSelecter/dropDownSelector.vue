@@ -46,7 +46,7 @@ const toggleDropdown = () => {
 <style lang="scss" scoped>
 .selector-container {
   display: flex;
-  border: 1.5px solid black;
+  border: none;
   border-radius: 4px;
   .selections {
     margin-left: 8px;
