@@ -3,11 +3,11 @@
     <el-header v-if="props.topNav" style="padding: 0;width: 100%;height: 70px;">
       <TopNav/>
     </el-header>
-    <el-container>
-      <el-side v-if="props.sideNav" style="background-color: #fefefe;">
+    <el-container style="background-color: #eff8ff;">
+      <el-side v-if="props.sideNav">
         <SideNav />
       </el-side>
-      <el-main style="background-color: #eff8ff;display: flex;" class="main">
+      <el-main style="display: flex;" class="main">
         <slot />
       </el-main>
     </el-container>

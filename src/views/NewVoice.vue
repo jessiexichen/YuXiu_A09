@@ -28,7 +28,6 @@
       >
         <div class="card-block" style="display: block;">
           <el-upload
-            class="el-upload"
             drag
             action=""
             multiple

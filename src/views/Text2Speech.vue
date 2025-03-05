@@ -128,7 +128,7 @@
             更多声音调节选项
           </el-button>
         </div>
-        <div class="card-block" style="justify-content: center;align-items:center;">
+        <div class="card-block" style="justify-content: center;align-items:center;gap: 5px;padding: 10px;">
           选择音频格式
           <el-radio-group>
             <el-radio label="mp3" />

@@ -2,10 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginPage from '@/views/LoginPage.vue'
 import Home from '@/views/HomePage.vue'
 import RegisterPage from '@/views/RegisterPage.vue'
-import UserCenter from '@/views/UserCenter.vue'
 import NewVoice from '@/views/NewVoice.vue'
 import Text2Speech from '@/views/Text2Speech.vue'
 import PPTCreation from '@/views/PPTCreation.vue'
+import MyVoice from '@/views/UserCenter/MyVoice.vue'
+import TranHistory from '@/views/UserCenter/TranHistory.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,7 +33,18 @@ const router = createRouter({
     {
       path: "/user-center",
       name: "个人中心",
-      component: UserCenter
+      children: [
+        {
+        path: "/user-center/myvoice",
+        name: "我的声音",
+        component: MyVoice,
+        },
+        {
+          path: "/user-center/tranhistory",
+          name: "转录历史",
+          component: TranHistory,
+        }
+      ]
     },
     {
       path: "/new-voice",

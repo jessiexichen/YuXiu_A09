@@ -26,5 +26,11 @@ $buttonHeight: 40px;
   line-height: $buttonHeight;
 
   cursor: pointer;
+
+  &:hover {
+    background-color: rgb(30, 108, 253);
+    color: rgb(255, 255, 255);
+    transition: all 0.2s;
+  }
 }
 </style>
