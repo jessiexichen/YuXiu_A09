@@ -1,3 +1,22 @@
+import type { navPage } from '@/types/navBar';
+
+const navPages : navPage[] = [
+  {name: "首页", url: "/home"},
+  {name:"产品简介",url: "/home/profile"},
+  {name:"使用教程",url: "/home/tutor"},
+  {name: "功能介绍",url: "/home/introduce"},
+  {name: "性能优势",url: ""},
+  {name: "迭代方向",url: ""},
+  {name: "用户评价",url: ""},
+  {name: "反馈入口",url: ""},
+]
+
+const childPages : navPage[] = [
+  { name: "语音合成", url: "/text-to-speech" },
+  { name: "构筑声音", url: "/new-voice" },
+  { name: "有声课件制作", url: "/ppt-creation" },
+];
+
 const lanConfig = {
   visibleLanguages : ["中文", "英语", "法语", "俄语", "西班牙语", "阿拉伯语"],
   visibleLanguages1 : ["中文", "英语", "法语", "俄语", "西班牙语", "阿拉伯语", "德语", "希腊语",
@@ -11,5 +30,10 @@ const lanConfig = {
 
   langType: ["标准", "温柔", "稚嫩", "活泼", "激情", "风趣"],
 }
-export default lanConfig
+export {
+  lanConfig,
+  navPages,
+  childPages
+}
+
 

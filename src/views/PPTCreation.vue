@@ -153,7 +153,7 @@ import Card from '@/components/card/CarD.vue';
 import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue';
 import NormButton from '@/components/button/normButton.vue';
 import { ElSwitch, ElButton, ElRadioGroup, ElSlider } from 'element-plus';
-import lanConfig from '@/assets/constants';
+import { lanConfig } from '@/assets/constants';
 
 
 </script>

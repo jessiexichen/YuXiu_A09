@@ -16,7 +16,7 @@
       {{item.name}}
       </div>
     </div>
-    <div style="display:flex; align-items: center;position: absolute;right: 2%;top: 30%;">
+    <div class="logButton">
       <LoginButton/>
     </div>
   </div>
@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import router from '@/router';
-import type { navPage } from '@/types/navBar';
+import { navPages } from '@/assets/constants';
 import LoginButton from './features/LoginButton.vue';
 
 function handleNav(url: string) {
@@ -33,16 +33,14 @@ function handleNav(url: string) {
 </script>
 
 <script lang="ts">
-  export const navPages : navPage[] = [
-    {name:"产品简介",url: "/home/profile"},
-    {name:"使用教程",url: "/home/tutor"},{name: "功能介绍",url: "/home/introduce"}
-  ]
+
 </script>
 
 <style lang="scss">
 .TopNav {
   position: relative;
   display: flex;
+  justify-content: space-around;
   width: 100%;
   height: 100%;
   background-color: #eff8ff;
@@ -51,6 +49,7 @@ function handleNav(url: string) {
   border-radius: 9px;
 
   .logoBlock {
+    flex-grow: 0.6;
     display: block;
     position: relative;
     left: 5%;
@@ -58,7 +57,7 @@ function handleNav(url: string) {
     font-size: 0.9rem;
     .logo {
       position: relative;
-      width: 180px;
+      width: 150px;
     }
     .logo-title {
         width: 100%;
@@ -69,15 +68,39 @@ function handleNav(url: string) {
   }
 
   .navBlock {
-    width: 1000px;
+    flex-grow: 6;
+    overflow: hidden;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-
+    :hover {
+      font-size: larger;
+      color: #1975FF;
+      background-color: #eff8ffef;
+    }
     .blocks {
       font-weight: bold;
       cursor: pointer;
+
+      transition: all 0.2s;
+
     }
+
+    @media screen and (max-width: 1000px){
+      overflow: hidden;
+
+
+      justify-content: start;
+      .blocks {
+        width: 100px;
+      }
+    }
+  }
+
+  .logButton {
+    display:flex;
+    flex-grow: 1;
+    align-items: center;
   }
 }
 </style>

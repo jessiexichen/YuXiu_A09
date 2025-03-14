@@ -74,7 +74,7 @@
 import LayOut from '@/components/layouts/LayOut.vue';
 import Card from '@/components/card/CarD.vue';
 import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue';
-import lanConfig from '@/assets/constants';
+import { lanConfig } from '@/assets/constants';
 import { ElUpload } from 'element-plus';
 </script>
 <style lang="scss" scoped>

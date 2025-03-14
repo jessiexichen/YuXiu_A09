@@ -1,7 +1,7 @@
 <template>
   <div class="Container">
     <div class="SideNav">
-      <div class="block" style="background: #F0F4FD;cursor: default;">产品服务</div>
+      <div class="block" style="background: #F0F4FD;cursor: default;font-size: large;">产品&服务</div>
       <div class="block"
         v-for="item in childPages"
         :key="item.name"
@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import router from '@/router';
 import { useRoute } from 'vue-router';
-
+import { childPages } from '@/assets/constants';
 
 function isActive(url: string) {
   if (useRoute().path === url) {
@@ -36,12 +36,7 @@ function isActive(url: string) {
 </script>
 
 <script lang="ts">
-const childPages = [
-  { name: "产品&服务", url: "/home" ,descrip: "系统语音教学 个性化语音服务"},
-  { name: "语音合成", url: "/text-to-speech" },
-  { name: "构筑声音", url: "/new-voice" },
-  { name: "有声课件制作", url: "/ppt-creation" },
-];
+
 </script>
 
 <style lang="scss">
@@ -64,7 +59,7 @@ const childPages = [
       cursor: pointer;
       border-bottom: 1.4px solid #f3f4f6;
       font-weight: bold;
-
+      transition: all 0.2s;
       text-align: center;
       width: 100%;
       height: $blockHeight;
@@ -89,13 +84,16 @@ const childPages = [
         left: 150px;
         bottom: 60px;
         z-index: 1;
+
+        transition: all 0.4s;
+
         .option {
           height: 50px;
           display: block;
           background-color: #ffffff;
           border-bottom: 1px solid #d1d9e0;
           line-height: 50px;
-
+          transition: all 0.2s;
           &:hover {
             background-color: #f3f4f6;
             color: #1975ff;

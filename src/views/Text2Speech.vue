@@ -150,7 +150,7 @@ import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue
 import NormButton from '@/components/button/normButton.vue';
 import { ElInput, ElSwitch, ElButton, ElRadioGroup, ElSlider } from 'element-plus';
 import { ref } from 'vue';
-import lanConfig from '@/assets/constants';
+import { lanConfig } from '@/assets/constants';
 const text = ref("")
 
 
