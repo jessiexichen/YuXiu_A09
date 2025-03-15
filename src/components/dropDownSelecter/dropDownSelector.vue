@@ -13,7 +13,10 @@
     </div>
     <div class="dropdown-button" v-if="hasMore">
       <ElButton  @click="toggleDropdown" class="button">
-        <img src="@/assets/icons/downArrow.png" style="width: 20px;"/>
+        <el-icon>
+          <ArrowDownBold v-if="!dropdownVisible" />
+          <ArrowUpBold v-if="dropdownVisible" />
+        </el-icon>
       </ElButton>
     </div>
   </div>
@@ -59,12 +62,15 @@ const toggleDropdown = () => {
 
   .dropdown-button {
     flex-grow: 1;
+    width: 10%;
     position: relative;
     display: flex;
     justify-content: end;
     align-items: end;
     .button {
       border: none;
+      position: absolute;
+      top: 0;
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <LayOut :side-nav="false">
-    <div class="card">
+    <div style="margin-top: 7%;" class="card">
       <div class="card-block titleBlock">
         <div
           class="title" @click="changeLogType('email')"

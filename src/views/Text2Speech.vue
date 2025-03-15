@@ -11,7 +11,7 @@
           :visible-selection="lanConfig.visibleLanguages"
           :has-more="true"
           :all-selection="lanConfig.allLanguages"
-          style="width: 86%;"
+          style="width: 90%;"
         />
       </Card>
       <Card
@@ -183,11 +183,11 @@ const text = ref("")
     .card-block {
       display: flex;
       flex-direction: row;
-      justify-content: start;
+      justify-content: space-between;
       gap: 5px;
       width: 100%;
       height: 100%;
-      padding-top: 10px;
+      padding: 10px 0 0 10px;
       padding-bottom: 5px;
       .block-title {
         display: flex;

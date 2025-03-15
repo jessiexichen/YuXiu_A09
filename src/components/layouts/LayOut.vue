@@ -3,13 +3,15 @@
     <el-header v-if="props.topNav" style="padding: 0;width: 100%;height: 70px;">
       <TopNav/>
     </el-header>
-    <el-container style="background-color: #eff8ff;max-height: 100%;overflow: auto;">
+    <el-container style="background-color: #eff8ff;overflow: auto;">
       <el-side v-if="props.sideNav">
         <SideNav />
       </el-side>
-      <el-main style="display: flex;max-height: 100%;overflow: auto;" class="main">
-        <slot />
-      </el-main>
+      <el-scrollbar style="width: 100%;min-height: 100%;">
+        <el-main style="display: flex;height: 100%;" class="main">
+            <slot />
+        </el-main>
+      </el-scrollbar>
     </el-container>
 
   </el-container>
