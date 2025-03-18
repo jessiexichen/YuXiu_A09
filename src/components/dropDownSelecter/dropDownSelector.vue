@@ -61,8 +61,7 @@ const toggleDropdown = () => {
   }
 
   .dropdown-button {
-    flex-grow: 1;
-    width: 10%;
+    width: 50px;
     position: relative;
     display: flex;
     justify-content: end;

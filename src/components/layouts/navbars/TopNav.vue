@@ -79,6 +79,7 @@ function handleNav(url: string) {
       background-color: #eff8ffef;
     }
     .blocks {
+      min-width: 5rem;
       font-weight: bold;
       cursor: pointer;
 

@@ -1,6 +1,6 @@
 <template>
   <LayOut>
-    <div style="padding-top: 50px;" class="card-container">
+    <div class="card-container">
       <Card
         title="选择输入样本语言"
       >

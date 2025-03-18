@@ -10,13 +10,6 @@
       >
       {{ item.name }}
     </div>
-    <div class="block">
-      个人中心
-      <div class="options">
-        <div class="option" @click="router.push('/user-center/myvoice')">我的声音</div>
-        <div class="option" @click="router.push('/user-center/tranhistory')">生成历史</div>
-      </div>
-    </div>
     </div>
   </div>
 </template>
@@ -27,10 +20,9 @@ import { useRoute } from 'vue-router';
 import { childPages } from '@/assets/constants';
 
 function isActive(url: string) {
-  if (useRoute().path === url) {
+  if (useRoute().path.includes(url)){
     return "active";
-  }
-  else return "";
+  } else return "";
 }
 
 </script>
@@ -73,31 +65,6 @@ function isActive(url: string) {
           visibility: visible;
           opacity: 1;
 
-        }
-      }
-      .options {
-        visibility: hidden;
-        opacity: 0;
-        width: 120px;
-        border: 1px solid #d1d9e0;
-        position: relative;
-        left: 150px;
-        bottom: 60px;
-        z-index: 1;
-
-        transition: all 0.4s;
-
-        .option {
-          height: 50px;
-          display: block;
-          background-color: #ffffff;
-          border-bottom: 1px solid #d1d9e0;
-          line-height: 50px;
-          transition: all 0.2s;
-          &:hover {
-            background-color: #f3f4f6;
-            color: #1975ff;
-          }
         }
       }
 

@@ -1,6 +1,6 @@
 <template>
   <LayOut :side-nav="false">
-    <div class="card">
+    <div style="margin-top: 7%;" class="card">
       <div class="card-block logo">
         <img src="@/assets/logo3.png" style="width: 150px;"/>
       </div>
@@ -9,12 +9,11 @@
       >
         <ElInput size="large" maxlength="23" placeholder="请输入邮箱地址" v-model="email">
           <template #append>
-            <el-button
+            <ElButton
               @click="getEmailCode"
-
             >
               发送验证码
-            </el-button>
+            </ElButton>
           </template>
         </ElInput>
         <ElInput size="large" maxlength="10" placeholder="请输入验证码" v-model="emailCode" />

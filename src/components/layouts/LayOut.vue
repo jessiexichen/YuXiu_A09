@@ -8,7 +8,7 @@
         <SideNav />
       </el-side>
       <el-scrollbar style="width: 100%;min-height: 100%;">
-        <el-main style="display: flex;height: 100%;" class="main">
+        <el-main style="display: flex;height: 100%;width: 100%;" class="main">
             <slot />
         </el-main>
       </el-scrollbar>
@@ -34,5 +34,8 @@ const props = defineProps({
 </script>
 
 <style lang="scss">
-
+.el-scrollbar__view {
+  height: 100%;
+  width: 100%;
+}
 </style>

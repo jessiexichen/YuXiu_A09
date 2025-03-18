@@ -49,32 +49,31 @@
         title="语音样本库"
       >
         <div class ="card-block" style="font-weight: bold;border-bottom: 1px solid var(--el-border-color);padding: 2px;">基础声音</div>
-        <div class="card-block">
+        <div class="basic-language">
           <div class="block-title">语言</div>
           <DropDownSelector
             :visible-selection="lanConfig.visibleLanguages"
             :has-more="true"
             :all-selection="lanConfig.allLanguages"
-            style="width: 90%;"
           />
         </div>
-        <div class="card-block" style="padding-right: 0;">
+        <div class="basic-language" style="padding-right: 0;">
           <div class="block-title">方言</div>
           <DropDownSelector
             :visible-selection="lanConfig.localLanguage"
             :has-more="false"
           />
         </div>
-        <div class="card-block">
+        <div class="basic-language">
           <div class="block-title">风格</div>
           <DropDownSelector
             :visible-selection="lanConfig.langType"
             :has-more="false"
           />
         </div>
-        <div class="card-block">
+        <div class="basic-language">
           <div class="block-title">方言</div>
-          <div>
+          <div style="position: relative;left: 8px;">
             <NormButton font="男"/>
             <NormButton font="女"/>
           </div>
@@ -187,8 +186,7 @@ const text = ref("")
       gap: 5px;
       width: 100%;
       height: 100%;
-      padding: 10px 0 0 10px;
-      padding-bottom: 5px;
+      padding: 10px 0 5px 10px;
       .block-title {
         display: flex;
         height: 100%;
@@ -197,6 +195,12 @@ const text = ref("")
         align-items: start;
         flex-grow: 1;
       }
+    }
+    .basic-language {
+      display: grid;
+      width: 100%;
+      grid-template-columns: 1fr 9fr;
+      padding: 10px 0 5px 10px;
     }
   }
 

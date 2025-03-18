@@ -5,8 +5,9 @@ import RegisterPage from '@/views/RegisterPage.vue'
 import NewVoice from '@/views/NewVoice.vue'
 import Text2Speech from '@/views/Text2Speech.vue'
 import PPTCreation from '@/views/PPTCreation.vue'
-import MyVoice from '@/views/UserCenter/MyVoice.vue'
-import TranHistory from '@/views/UserCenter/TranHistory.vue'
+import MyVoice from '@/views/UserCenter/ChildPages/MyVoice.vue'
+import TranHistory from '@/views/UserCenter/ChildPages/TranHistory.vue'
+import UserCenter from '@/views/UserCenter/UserCenter.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,7 @@ const router = createRouter({
     {
       path: "/user-center",
       name: "个人中心",
+      component: UserCenter,
       children: [
         {
         path: "/user-center/myvoice",
@@ -64,4 +66,6 @@ const router = createRouter({
   ],
 })
 
+router.beforeEach(()=>{
+})
 export default router
