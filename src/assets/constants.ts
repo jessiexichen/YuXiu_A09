@@ -2,13 +2,13 @@ import type { navPage } from '@/types/navBar';
 
 const navPages : navPage[] = [
   {name: "首页", url: "/home"},
-  {name:"产品简介",url: "/home/profile"},
-  {name:"使用教程",url: "/home/tutor"},
-  {name: "功能介绍",url: "/home/introduce"},
-  {name: "性能优势",url: ""},
-  {name: "迭代方向",url: ""},
-  {name: "用户评价",url: ""},
-  {name: "反馈入口",url: ""},
+  {name:"产品简介",url: "/home"},
+  {name:"使用教程",url: "/home"},
+  {name: "功能介绍",url: "/home"},
+  {name: "性能优势",url: "/home"},
+  {name: "迭代方向",url: "/home"},
+  {name: "用户评价",url: "/home"},
+  {name: "反馈入口",url: "/home"},
 ]
 
 const childPages : navPage[] = [

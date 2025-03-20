@@ -8,12 +8,12 @@
     </div>
     <div class="navBlock">
       <div
-       class="blocks"
-       v-for="item in navPages"
-       :key="item.name"
-       @click="handleNav(item.url)"
+        class="blocks"
+        v-for="item in navPages"
+        :key="item.name"
+        @click="handleNav(item.url, item.name)"
       >
-      {{item.name}}
+        {{item.name}}
       </div>
     </div>
     <div class="logButton">
@@ -27,13 +27,15 @@ import router from '@/router';
 import { navPages } from '@/assets/constants';
 import LoginButton from './features/LoginButton.vue';
 
-function handleNav(url: string) {
-  router.push(url)
+function handleNav(url: string,name: string) {
+    router.push({ path: url, hash: "#"+name})
 }
 </script>
 
 <script lang="ts">
+export default {
 
+}
 </script>
 
 <style lang="scss">

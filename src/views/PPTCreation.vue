@@ -36,10 +36,13 @@
           action=""
           style="display: block;"
         >
-          <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-          <div class="el-upload__text">
-            可拖拽至此上传或<em>点击上传</em>
+          <div style="height: 270px;display: flex;flex-direction: column;justify-content: center;align-items: center;">
+            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+            <div class="el-upload__text">
+              可拖拽至此上传或<em>点击上传</em>
+            </div>
           </div>
+
         </el-upload>
       </div>
 

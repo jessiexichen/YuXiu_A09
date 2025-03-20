@@ -1,6 +1,9 @@
 <template>
-  <LayOut :side-nav="false">
-    <div style="margin-top: 7%;" class="card">
+  <LayOut
+    :side-nav="false"
+    background="Login"
+  >
+    <div class="card">
       <div class="card-block logo">
         <img src="@/assets/logo3.png" style="width: 150px;"/>
       </div>
