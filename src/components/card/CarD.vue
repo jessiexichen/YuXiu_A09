@@ -26,7 +26,6 @@ const props = defineProps<Props>()
   align-items: start;
   margin-top: 10px;
   margin-bottom: 10px;
-  overflow: hidden;
   .title {
     width: 100%;
     font-size: 17px;
