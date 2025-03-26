@@ -3,7 +3,7 @@
     <div
       class="selections"
       :style="dropdownVisible ?
-          {flexWrap: 'wrap'} : {overflow: 'hidden', whiteSpace: 'nowrap'}"
+          {flexWrap: 'wrap'} : {overflow: 'hidden',whiteSpace: 'nowrap'}"
     >
       <NormButton
         v-for="(item, index) in showedSelections"
@@ -56,7 +56,7 @@ const toggleDropdown = () => {
     flex-grow: 5;
     display: flex;
     flex-direction: row;
-    gap: 5px;
+    gap: 8px 8px;
 
   }
 

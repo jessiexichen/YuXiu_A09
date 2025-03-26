@@ -15,17 +15,6 @@
         />
       </Card>
       <Card
-        title="随机生成文本内容"
-      >
-        <div style="width: 80%;display:flex;gap: 2%;overflow: hidden;">
-          <NormButton
-          v-for="(item, index) in lanConfig.contentType"
-          :key="index"
-          :font="item"
-        />
-        </div>
-      </Card>
-      <Card
         title="上传PPT"
         description="不超过20MB"
       >

@@ -3,6 +3,7 @@
     <div class="card-container">
       <Card
         title="选择输入样本语言"
+        class="top-block"
       >
         <div class="card-block">
           <div class="block-title">语言</div>
@@ -10,7 +11,7 @@
             :visible-selection="lanConfig.visibleLanguages1"
             :has-more="true"
             :all-selection="lanConfig.allLanguages"
-            style="width: 95%;border: none;"
+            style="width: 91%;border: none;"
           />
         </div>
         <div class="card-block" style="padding-right: 0;">
@@ -25,6 +26,7 @@
       <Card
         title="上传音频文件样本"
         description="5s-30s"
+        class="bottome-block"
       >
         <div class="card-block" style="display: block;">
           <el-upload
@@ -80,25 +82,30 @@ import { ElUpload } from 'element-plus';
 <style lang="scss" scoped>
 .card-container {
   width: 100%;
-  display: flex;
+  height: 100%;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   .card {
     width: 95%;
-
     .card-block {
       width: 100%;
-
       .block-title {
         height: 30px;
         font-size: 16px;
         line-height: 35px;
         color: #4B5563;
       }
-
     }
+  }
+
+  .top-block {
+    position: relative;
+    top: 4%;
+  }
+  .bottome-block {
+    position: relative;
+    top: 6%;
   }
 }
 
