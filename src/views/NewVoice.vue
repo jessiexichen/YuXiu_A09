@@ -2,7 +2,7 @@
   <LayOut>
     <div class="card-container">
       <Card
-        title="选择输入样本语言"
+        title="输入样本语言"
         class="top-block"
       >
         <div class="card-block">
@@ -24,22 +24,26 @@
         </div>
       </Card>
       <Card
-        title="上传音频文件样本"
+        title="音频文件样本"
         description="5s-30s"
         class="bottome-block"
       >
         <div class="card-block" style="display: block;">
-          <el-upload
-            drag
-            action=""
-            multiple
-            style="display: block;"
+          <div
+            class="upload-demo"
           >
-            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-            <div class="el-upload__text">
-              可拖拽至此上传或<em>点击上传</em>
+            <div style="position: relative;top: 8%;">
+              <el-button type="primary" class="recording" plain>
+                <img src="@/assets/icons/record.png" style="">点击录制
+              </el-button>
+              <el-button type="primary" class="uploading" plain>
+                <img src="@/assets/icons/upload.png" style="">点击上传
+              </el-button>
             </div>
-            <div class="el-upload__text">
+            <div class="upload-text" style="position: relative;top: 13%;color: #6B7280;">
+              可拖拽至此上传或点击上传
+            </div>
+            <div class="upload-text" style="position: relative;top: 13%;color: #6B7280;">
               支持格式: mp3、ogg、aac、opus、wav
             </div>
             <!-- <template #tip>
@@ -47,12 +51,12 @@
                 jpg/png files with a size less than 500kb
               </div>
             </template> -->
-          </el-upload>
+          </div>
         </div>
         <div class="card-block">
-          <el-button type="primary" style="width: 35px;height: 35px;border-radius: 100%;">
-            <img src="@/assets/icons/begin.png" style="width: 1.9em;">
-            <!-- <img src="@/assets/icons/pause.png" style="width: 0.8em;"> -->
+          <el-button type="primary" style="width: 35px;height: 35px;border-radius: 100%;" @click="play()">
+            <img src="@/assets/icons/begin.png" style="width: 1.9em;" v-if="!isPlaying">
+            <img src="@/assets/icons/pause.png" style="width: 0.7em;" v-else>
           </el-button>
            <text style="line-height: 35px;">00:07</text>
            <el-slider style="width: 200px;"/>
@@ -66,7 +70,14 @@
           </el-button>
         </div>
         <div class="card-block">
-          <el-button type="info" plain style="width: 100%;">收藏声音</el-button>
+          <el-button
+            type="info"
+            plain
+            style="width: 100%;"
+            @click="Collect()"
+          >
+          收藏声音
+        </el-button>
         </div>
     </Card>
     </div>
@@ -77,7 +88,36 @@ import LayOut from '@/components/layouts/LayOut.vue';
 import Card from '@/components/card/CarD.vue';
 import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue';
 import { lanConfig } from '@/assets/constants';
-import { ElUpload } from 'element-plus';
+import { ref } from 'vue';
+import { ElMessage, ElMessageBox } from 'element-plus'
+
+const isPlaying = ref(false);
+
+function play() {
+  isPlaying.value = !isPlaying.value;
+}
+
+function Collect() {
+  ElMessageBox.prompt('Please input your e-mail', 'Tip', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    inputPattern:
+      /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+    inputErrorMessage: 'Invalid Email',
+  })
+    .then(({ value }) => {
+      ElMessage({
+        type: 'success',
+        message: `Your email is:${value}`,
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: 'Input canceled',
+      })
+    })
+}
 </script>
 <style lang="scss" scoped>
 .card-container {
@@ -107,6 +147,26 @@ import { ElUpload } from 'element-plus';
     position: relative;
     top: 6%;
   }
+}
+
+.upload-demo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 300px;
+  border: 1px dashed #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+
+
+  .el-button.el-button--primary {
+    border: none;
+    height: 45px;
+    width: 120px;
+    z-index: 1;
+  }
+
 }
 
 </style>
