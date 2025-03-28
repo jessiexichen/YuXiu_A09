@@ -1,14 +1,25 @@
 <template>
-  <div class="loginButton" @click="handleTab()">
+  <div class="loginButton" @click="handleTab()" v-if="!useLoginStore().loginStatus">
     登录
+  </div>
+  <div v-else>
+    <el-avatar :src="useAvatarStore().avatarUrl" class="avatar" @click="handleTab()" />
   </div>
 </template>
 
 <script setup lang="ts">
 import router from '@/router';
+import { useLoginStore } from '@/stores/login';
+import { useAvatarStore } from '@/stores/avatar';
+import { ElAvatar } from 'element-plus';
 
 function handleTab() {
-  router.push("/login")
+  if(!useLoginStore().loginStatus) {
+    router.push("login")
+  }
+  else {
+    router.push("/user-center")
+  }
 }
 </script>
 <style lang="scss">
@@ -32,5 +43,13 @@ $buttonHeight: 40px;
     color: rgb(255, 255, 255);
     transition: all 0.2s;
   }
+}
+
+.avatar {
+  position: relative;
+  top: 5px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
 }
 </style>

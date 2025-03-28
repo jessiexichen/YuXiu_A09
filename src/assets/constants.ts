@@ -16,6 +16,7 @@ const childPages : navPage[] = [
   { name: "构筑声音", url: "/new-voice" },
   { name: "有声课件制作", url: "/ppt-creation" },
   { name: "个人中心", url: "/user-center" },
+  { name: "生成历史", url: "/tranhistory" },
 ];
 
 const lanConfig = {

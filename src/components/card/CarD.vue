@@ -4,7 +4,7 @@
       <div>{{ title }}</div>
       <div class="description">{{ description }}</div>
     </div>
-    <div class="card" style="width: 100%;">
+    <div class="card inner-card" style="width: 100%;">
       <slot />
     </div>
   </div>

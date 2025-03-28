@@ -45,7 +45,7 @@
         </div>
       </div>
       <div class="card-block function">
-        <ElButton type="primary" size="large" style="width: 100%; height: 45px;">登录</ElButton>
+        <ElButton type="primary" size="large" style="width: 100%; height: 45px;" @click="login()">登录</ElButton>
         <RouterLink to="/register">去注册-></RouterLink>
       </div>
     </div>
@@ -53,9 +53,10 @@
 </template>
 <script setup lang="ts">
 import LayOut from '@/components/layouts/LayOut.vue';
-import { ElButton, ElInput, ElCheckbox } from 'element-plus';
+import { ElButton, ElInput, ElCheckbox, ElMessage } from 'element-plus';
 import { ref } from 'vue';
-
+import { useLoginStore } from '@/stores/login';
+import router from '@/router';
 const loginType = ref("email")
 function changeLogType(type: "email" | "account") {
   loginType.value = type
@@ -64,6 +65,13 @@ const password = ref(undefined)
 const email = ref(undefined)
 const account = ref(undefined)
 const initial = ref(undefined)
+
+function login() {
+  useLoginStore().login()
+  ElMessage.success("登录成功")
+  router.push("/home")
+}
+
 </script>
 
 <style scoped lang="scss">

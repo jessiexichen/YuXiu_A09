@@ -41,7 +41,8 @@
 </template>
 <script setup lang="ts">
 import LayOut from '@/components/layouts/LayOut.vue';
-import { ElButton, ElInput } from 'element-plus';
+import router from '@/router';
+import { ElButton, ElInput, ElMessage } from 'element-plus';
 import { ElCheckbox } from 'element-plus';
 import { ref } from 'vue';
 
@@ -52,11 +53,12 @@ const emailCode = ref(undefined)
 const initial = ref(undefined)
 
 function getEmailCode() {
-
+  ElMessage.success("发送成功")
 }
 
 function register() {
-
+  ElMessage.success("注册成功")
+  router.push("/login")
 }
 </script>
 
