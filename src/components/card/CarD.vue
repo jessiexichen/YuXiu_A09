@@ -35,7 +35,7 @@ const props = defineProps<Props>()
     gap: 15px;
     .description {
       font-size: 14px;
-      color: #9E9E9E;
+      color: #e78f8f;
     }
   }
 }

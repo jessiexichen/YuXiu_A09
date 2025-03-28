@@ -51,9 +51,10 @@
             :visible-selection="lanConfig.visibleLanguages"
             :has-more="true"
             :all-selection="lanConfig.allLanguages"
+            v-model="selectedLanguage"
           />
         </div>
-        <div class="basic-language" style="padding-right: 0;">
+        <div class="basic-language" style="padding-right: 0;" v-if="selectedLanguage === '中文'">
           <div class="block-title">方言</div>
           <DropDownSelector
             :visible-selection="lanConfig.localLanguage"
@@ -69,10 +70,10 @@
         </div>
         <div class="basic-language">
           <div class="block-title">方言</div>
-          <div style="position: relative;left: 8px;">
-            <NormButton font="男"/>
-            <NormButton font="女"/>
-          </div>
+          <DropDownSelector
+            :visible-selection="['男','女']"
+            :has-more="false"
+          />
         </div>
         <div class="card-block" style="font-weight: bold;">
           热门人物声音
@@ -181,15 +182,11 @@
 import LayOut from '@/components/layouts/LayOut.vue';
 import Card from '@/components/card/CarD.vue';
 import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue';
-import NormButton from '@/components/button/normButton.vue';
 import { ElSwitch, ElButton, ElRadioGroup, ElSlider } from 'element-plus';
 import { lanConfig } from '@/assets/constants';
-
-
-</script>
-
-<script lang="ts">
 import { ref } from 'vue';
+
+const selectedLanguage = ref("")
 
 const isShowMore = ref(false);
 const Speed = ref("");

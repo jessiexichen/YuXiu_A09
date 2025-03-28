@@ -9,6 +9,8 @@
         v-for="(item, index) in showedSelections"
         :key="index"
         :font="item"
+        :class="selectedOne === item ? 'active' : ''"
+        @click="selectedOne = item"
       />
     </div>
     <div class="dropdown-button" v-if="hasMore">
@@ -33,7 +35,8 @@ type Props = {
   allSelection?: string[],
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
+const selectedOne = defineModel<string>();
 
 const showedSelections = ref<string[] | undefined>(props.visibleSelection)
 /** 控制下拉菜单的显示与隐藏 */
