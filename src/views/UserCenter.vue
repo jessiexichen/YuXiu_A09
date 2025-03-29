@@ -51,7 +51,52 @@
               <div class="info-title">密码</div>
               <div class="info-content">********</div>
             </div>
+            <div class="restore" @click="restore()">
+              <img src="@/assets/icons/restore.png">
+            </div>
           </div>
+          <el-dialog
+            v-model="dialogVisible"
+            width="50%"
+            align-center
+            :before-close="handleClose"
+          >
+            <el-form
+              ref="formRef"
+              :model="userInfo"
+              :rules="rules"
+              label-width="80px"
+              status-icon
+            >
+              <el-form-item label="用户名" prop="username">
+                <el-input
+                  v-model="userInfo.username"
+                  placeholder="请勿清空哦"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱" prop="email">
+                <el-input
+                  v-model="userInfo.email"
+                  placeholder="请勿清空哦"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item label="密码" prop="password">
+                <el-input
+                  v-model="userInfo.password"
+                  placeholder="请勿清空哦"
+                  clearable
+                ></el-input>
+              </el-form-item>
+            </el-form>
+
+            <template #footer>
+              <span class="dialog-footer">
+                <el-button @click="handleClose">取消</el-button>
+                <el-button type="primary" @click="submitForm">确定</el-button>
+              </span>
+            </template>
+          </el-dialog>
         </div>
         <div class="card-block bottom-block">
           <div class="child-selector">
@@ -76,8 +121,8 @@
 import LayOut from '@/components/layouts/LayOut.vue';
 import CarD from '@/components/card/CarD.vue';
 import router from '@/router';
-import { ElAvatar, ElMessage } from 'element-plus';
-import { computed, ref } from "vue";
+import { ElAvatar, ElMessage, ElMessageBox } from 'element-plus';
+import { computed, reactive, ref } from "vue";
 import { Check, Loading } from "@element-plus/icons-vue";
 import { useAvatarStore } from '@/stores/avatar';
 
@@ -86,6 +131,76 @@ const userInfo = ref({
   email: "2332876536@qq.com",
   password: "123456",
 });
+
+const restore = () => {
+  ElMessageBox.prompt('请输入你的原密码', '验证', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    inputErrorMessage: '密码错误',
+  })
+    .then(({ value }) => {
+      if (value===userInfo.value.password){
+        ElMessage({
+        type: 'success',
+        message: `密码正确`,
+        })
+        dialogVisible.value = true;
+      }
+      else {
+        ElMessage({
+        type: 'error',
+        message: `密码错误，请重新尝试`,
+        })
+      }
+    })
+}
+
+const dialogVisible = ref(false);
+const formRef = ref();
+
+const  rules = reactive({
+  username: [
+    { required: true, message: "请输入用户名", trigger: "blur" },
+    { min: 1, max: 10, message: "长度在 1 到 10 个字符", trigger: "blur" },
+  ],
+  email: [
+    { required: true, message: "邮箱请勿留空", trigger: "blur" },
+    { min: 1, max: 20, message: "长度在 1 到 20 个字符", trigger: "blur" },
+  ],
+  password: [
+    { required: true, message: "密码请勿留空", trigger: "blur" },
+    { min: 1, max: 15, message: "长度在 1 到 15 个字符", trigger: "blur" },
+  ],
+});
+
+
+const  handleClose = () => {
+  dialogVisible.value = false;
+  formRef.value.resetFields();
+};
+
+const  submitForm = () => {
+formRef.value.validate((valid: boolean) => {
+  if (valid) {
+    ElMessageBox.confirm("确定要修改吗？", "提示", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "info",
+    })
+    .then(() => {
+      // 提交表单逻辑
+      ElMessage.success("修改成功！");
+      dialogVisible.value = false;
+    })
+    .catch(() => {
+      ElMessage.info("已取消修改");
+    })
+    } else {
+        ElMessage.error("表单验证失败，请检查输入内容！");
+        return false;
+      }
+  });
+};
 </script>
 
 <script lang="ts">
@@ -182,20 +297,26 @@ const userInfo = ref({
         justify-content: center;
 
         .avatar-wrapper {
+          display: relative;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
           cursor: pointer;
-
+          transition: all 0.3s;
           .avatar {
             height: 80px;
             width: 80px;
           }
+          .loading-icon {
+            position: absolute;
+          }
         }
+        :hover.avatar-wrapper {
+          scale: 105%;
+          }
       }
       .user-info-container {
-        margin-top: 10px;
         width: 100%;
         height: 40%;
         display: flex;
@@ -230,7 +351,21 @@ const userInfo = ref({
             color: #6b7280;
           }
         }
-
+        .restore {
+          width: 20%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          img {
+            height: 30px;
+            &:hover {
+              transform: scale(1.1);
+              transition: all 0.3s;
+            }
+          }
+        }
       }
     }
     .bottom-block {

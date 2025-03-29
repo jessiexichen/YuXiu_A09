@@ -163,7 +163,7 @@ import Card from '@/components/card/CarD.vue';
 import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue';
 import { lanConfig } from '@/assets/constants';
 import { ref ,reactive } from 'vue';
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox, ElDialog } from 'element-plus'
 
 const isPlaying = ref(false);
 

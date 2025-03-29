@@ -51,5 +51,10 @@ $buttonHeight: 40px;
   width: 40px;
   height: 40px;
   cursor: pointer;
+
+  &:hover {
+    transform: scale(1.1);
+    transition: all 0.3s;
+  }
 }
 </style>
