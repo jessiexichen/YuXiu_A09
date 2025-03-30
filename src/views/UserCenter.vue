@@ -119,7 +119,7 @@
       <div class="filter-actions">
         <el-select v-model="filterGroup" placeholder="分组筛选" style="width: 120px; margin-right: 10px">
           <el-option label="全部" value=""></el-option>
-          <el-option v-for="group in groups" :key="group" :label="group" :value="group"></el-option>
+          <el-option v-for="group in useCollection().groups" :key="group" :label="group" :value="group"></el-option>
         </el-select>
 
         <el-button type="primary" @click="router.push('/new-voice')">构建新声音</el-button>
@@ -138,7 +138,7 @@
         <div class="voice-content">
           <div class="voice-info">
             <div class="voice-icon">
-              <el-icon><Audio /></el-icon>
+              <el-icon><img src="@/assets/icons/audio.png" style="scale: .5;"/></el-icon>
             </div>
             <div class="voice-details">
               <div class="voice-name">{{ voice.name }}</div>
@@ -157,15 +157,51 @@
           <div class="voice-actions">
             <el-tag type="success" size="small">成功</el-tag>
             <el-button type="primary" size="small" >使用声音</el-button>
-            <el-button type="text" >
+            <el-button type="text" @click="editVoiceDialog(voice.id)">
               <el-icon><Edit /></el-icon>
             </el-button>
-            <el-button type="text" >
+            <el-button type="text" @click="delVoice(voice.id)">
               <el-icon><Delete /></el-icon>
             </el-button>
           </div>
         </div>
+        <!-- 修改我的声音的dialog -->
+        <el-dialog
+          v-model="voiceDialogVisible"
+          width="50%"
+          align-center
+          :before-close="handleCloseVoice"
+        >
+          <el-form
+            ref="voiceFormRef"
+            :model="voiceFormRef"
+            label-width="80px"
+            status-icon
+          >
+            <el-form-item label="命名" prop="name">
+              <el-input
+                v-model="voiceFormRef.name"
+                placeholder="请输入"
+                clearable
+              ></el-input>
+            </el-form-item>
 
+            <el-form-item label="分组" prop="group">
+              <el-input
+                v-model="voiceFormRef.group"
+                placeholder="默认收藏夹"
+                clearable
+              ></el-input>
+            </el-form-item>
+          </el-form>
+
+          <template #footer>
+            <span class="dialog-footer">
+              <el-button @click="handleCloseVoice(0, false)">取消</el-button>
+              <el-button type="primary" @click="handleCloseVoice(voice.id, true)">确定</el-button>
+            </span>
+          </template>
+        </el-dialog>
       </el-card>
     </div>
   </div>
@@ -182,7 +218,7 @@ import router from '@/router';
 import { ElAvatar, ElMessage, ElMessageBox } from 'element-plus';
 import { computed, reactive, ref } from "vue";
 import { Check, Loading } from "@element-plus/icons-vue";
-import { useAvatarStore } from '@/stores/avatar';
+import { useAvatar, useCollection } from '@/stores/index';
 
 const userInfo = ref({
   username: "2332876536",
@@ -259,11 +295,72 @@ formRef.value.validate((valid: boolean) => {
       }
   });
 };
+
+
+
+//voice修改部分
+function delVoice(id: number) {
+  ElMessageBox.confirm(
+    '是否确认删除?',
+    'Warning',
+    {
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      ElMessage({
+        type: 'success',
+        message: '删除成功',
+      })
+      useCollection().DeleteVoice(id);
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '删除取消',
+      })
+    })
+}
+
+
+const voiceDialogVisible = ref(false);
+const voiceFormRef = ref({
+  name: "",
+  group: "",
+});
+function handleCloseVoice(id:number, isEnsured: boolean) {
+  if (isEnsured) {
+    if(useCollection().restoreVoice(id, voiceFormRef.value.name, voiceFormRef.value.group)){
+      ElMessage({
+        type: 'success',
+        message: '修改成功',
+      })
+    };
+  }
+  else {
+    ElMessage({
+      type: 'info',
+      message: '取消修改',
+    })
+  }
+  voiceDialogVisible.value = false;
+  voiceFormRef.value.name = "";
+  voiceFormRef.value.group = "";
+}
+function editVoiceDialog(id: number) {
+  voiceDialogVisible.value = true;
+  useCollection().getVoice(id).then((voice) => {
+    voiceFormRef.value.name = voice.name;
+    voiceFormRef.value.group = voice.group;
+  });
+}
 </script>
 
 <script lang="ts">
     const fileInput = ref(null);
-    const currentAvatar = computed(() => useAvatarStore().avatarUrl);
+    const currentAvatar = computed(() => useAvatar().avatarUrl);
     const isUploading = ref(false);
     const uploadSuccessDialogVisible = ref(false);
 
@@ -305,7 +402,7 @@ formRef.value.validate((valid: boolean) => {
       try {
         // 模拟上传过程
         const uploadedUrl:string = await simulateUploadSuccess(file);
-        useAvatarStore().changeAvatar(uploadedUrl);
+        useAvatar().changeAvatar(uploadedUrl);
         uploadSuccessDialogVisible.value = true;
       } catch (error) {
         ElMessage.error("上传失败，请重试！");
@@ -325,23 +422,6 @@ import {
   Clock, Folder, Edit, Delete
 } from "@element-plus/icons-vue";
 
-
-    // 声音数据
-    const voices = ref([
-      {
-        id: 1,
-        name: "声音1",
-        date: "2025-2-25 09:49",
-        group: "分组1",
-        status: "success",
-        file: null
-      },
-      // 可以添加更多声音数据
-    ]);
-
-    // 分组列表
-    const groups = ref(["分组1", "分组2", "分组3", "未分组"]);
-
     // 搜索框绑定
     const searchQuery = ref("")
 
@@ -358,7 +438,7 @@ import {
       const query = searchQuery.value.toLowerCase();
       const groupFilter = filterGroup.value;
 
-      return voices.value.filter(voice => {
+      return useCollection().voices.filter((voice) => {
         // 搜索框过滤
         const matchesSearch = voice.name.toLowerCase().includes(query);
 
@@ -575,7 +655,7 @@ import {
   width: 40px;
   height: 40px;
   background-color: #f5f5f5;
-  border-radius: 50%;
+  border-radius: 20%;
   display: flex;
   justify-content: center;
   align-items: center;

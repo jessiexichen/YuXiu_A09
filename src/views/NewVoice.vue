@@ -164,6 +164,7 @@ import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue
 import { lanConfig } from '@/assets/constants';
 import { ref ,reactive } from 'vue';
 import { ElMessage, ElMessageBox, ElDialog } from 'element-plus'
+import { useCollection } from '@/stores';
 
 const isPlaying = ref(false);
 
@@ -183,6 +184,7 @@ function VoiceSelect(command: string) {
 }
 function Collect() {
   dialogVisible.value = true;
+  useCollection().buildGroup("")
 }
 const dialogVisible = ref(false);
 const formRef = ref();
@@ -205,6 +207,7 @@ const  rules = reactive({
 
 
 const  handleClose = () => {
+  useCollection().CollectVoice(form.name, form.group);
   dialogVisible.value = false;
   formRef.value.resetFields();
 };
