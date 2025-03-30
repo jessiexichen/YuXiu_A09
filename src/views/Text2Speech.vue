@@ -114,7 +114,7 @@
             <img src="@/assets/icons/voice.png" style="width: 1.5em;height: 1.1em;" >
           </div>
            <el-button type="primary" style="width: 140px;">
-            <img src="@/assets/icons/：.png" style="width: 0.8em;height: 1.3em;" >
+            <img src="@/assets/icons/dots.png" style="width: 0.8em;height: 1.3em;" >
             更多声音调节选项
           </el-button>
         </div>
