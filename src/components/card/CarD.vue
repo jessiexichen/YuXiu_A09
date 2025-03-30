@@ -38,5 +38,11 @@ const props = defineProps<Props>()
       color: #e78f8f;
     }
   }
+  .inner-card {
+    position: static;
+    width: 100%;
+    height: auto;
+    padding: 0;
+  }
 }
 </style>

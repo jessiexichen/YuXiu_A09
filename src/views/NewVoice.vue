@@ -239,8 +239,9 @@ formRef.value.validate((valid: boolean) => {
   height: 100%;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   .card {
+    height: auto;
     width: 95%;
     .card-block {
       width: 100%;

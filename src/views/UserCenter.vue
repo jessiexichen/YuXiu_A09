@@ -99,18 +99,76 @@
           </el-dialog>
         </div>
         <div class="card-block bottom-block">
-          <div class="child-selector">
-              <div
-                class="title"
-                :class="router.currentRoute.value.name === '我的声音' ? 'active': undefined"
-                @click="router.push('/user-center/myvoice')"
-              >
-                我的声音
+          <div class="voice-container">
+    <!-- 页面标题 -->
+    <div class="page-title">
+      <h2>我的声音</h2>
+    </div>
+
+    <!-- 搜索框和操作按钮 -->
+    <div class="search-bar">
+      <el-input
+        v-model="searchQuery"
+        placeholder="搜索我的声音"
+        prefix-icon="Search"
+        clearable
+        @input="handleSearch"
+        style="width: 80%"
+      ></el-input>
+
+      <div class="filter-actions">
+        <el-select v-model="filterGroup" placeholder="分组筛选" style="width: 120px; margin-right: 10px">
+          <el-option label="全部" value=""></el-option>
+          <el-option v-for="group in groups" :key="group" :label="group" :value="group"></el-option>
+        </el-select>
+
+        <el-button type="primary" @click="router.push('/new-voice')">构建新声音</el-button>
+      </div>
+    </div>
+
+    <!-- 声音列表 -->
+    <div class="voice-list">
+
+      <el-card
+        v-for="voice in filteredVoices"
+        :key="voice.id"
+        class="voice-item"
+        shadow="hover"
+      >
+        <div class="voice-content">
+          <div class="voice-info">
+            <div class="voice-icon">
+              <el-icon><Audio /></el-icon>
+            </div>
+            <div class="voice-details">
+              <div class="voice-name">{{ voice.name }}</div>
+              <div class="voice-meta">
+                <span class="voice-date">
+                  <el-icon><Clock /></el-icon>
+                  {{ voice.date }}
+                </span>
+                <span class="voice-group">
+                  <el-icon><Folder /></el-icon>
+                  {{ voice.group }}
+                </span>
               </div>
+            </div>
           </div>
-          <div class="child-page">
-            <RouterView />
+          <div class="voice-actions">
+            <el-tag type="success" size="small">成功</el-tag>
+            <el-button type="primary" size="small" >使用声音</el-button>
+            <el-button type="text" >
+              <el-icon><Edit /></el-icon>
+            </el-button>
+            <el-button type="text" >
+              <el-icon><Delete /></el-icon>
+            </el-button>
           </div>
+        </div>
+
+      </el-card>
+    </div>
+  </div>
         </div>
       </CarD>
     </div>
@@ -263,7 +321,55 @@ formRef.value.validate((valid: boolean) => {
     const handleCloseDialog = () => {
       uploadSuccessDialogVisible.value = false;
     };
+import {
+  Clock, Folder, Edit, Delete
+} from "@element-plus/icons-vue";
+
+
+    // 声音数据
+    const voices = ref([
+      {
+        id: 1,
+        name: "声音1",
+        date: "2025-2-25 09:49",
+        group: "分组1",
+        status: "success",
+        file: null
+      },
+      // 可以添加更多声音数据
+    ]);
+
+    // 分组列表
+    const groups = ref(["分组1", "分组2", "分组3", "未分组"]);
+
+    // 搜索框绑定
+    const searchQuery = ref("")
+
+    // 分组筛选
+    const filterGroup = ref("");
+
+    // 搜索框逻辑
+    const handleSearch = () => {
+      // 搜索框输入时触发
+    };
+
+    // 过滤后的声音列表
+    const filteredVoices = computed(() => {
+      const query = searchQuery.value.toLowerCase();
+      const groupFilter = filterGroup.value;
+
+      return voices.value.filter(voice => {
+        // 搜索框过滤
+        const matchesSearch = voice.name.toLowerCase().includes(query);
+
+        // 分组过滤
+        const matchesGroup = groupFilter ? voice.group === groupFilter : true;
+
+        return matchesSearch && matchesGroup;
+      });
+    });
 </script>
+
 
 <style lang="scss">
 .card-container {
@@ -281,7 +387,7 @@ formRef.value.validate((valid: boolean) => {
       padding: 0;
     }
     .top-block {
-      height: 30%;
+      height: 25%;
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -371,7 +477,7 @@ formRef.value.validate((valid: boolean) => {
     .bottom-block {
       display: flex;
       flex-direction: column;
-      height: 66%;
+      height: 75%;
       width: 100%;
 
       .child-selector {
@@ -398,8 +504,110 @@ formRef.value.validate((valid: boolean) => {
         }
       }
     }
+
+    .card-block {
+      padding-bottom: 0px;
+      .title {
+        height: 30px;
+        font-size: 24px;
+        font-weight: bold;
+        line-height: 32px;
+        letter-spacing: 0px;
+        color: black;
+      }
+    }
   }
 }
 
+.el-card__body {
+  width: 100%;
+}
 
+</style>
+<style scoped>
+
+
+.page-title {
+  margin-bottom: 8px;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.filter-actions {
+  display: flex;
+  align-items: center;
+}
+
+.voice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.voice-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 10px;
+
+}
+
+.voice-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+
+}
+
+.voice-info {
+  display: flex;
+  align-items: center;
+}
+
+.voice-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.voice-details {
+  flex: 1;
+}
+
+.voice-name {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.voice-meta {
+  font-size: 12px;
+  color: #666;
+}
+
+.voice-date {
+  margin-right: 15px;
+}
+
+.voice-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+:deep(.el-tag) {
+  height: 24px;
+  line-height: 24px;
+}
 </style>
