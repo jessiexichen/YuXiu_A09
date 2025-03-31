@@ -38,62 +38,26 @@
       <Card
         title="语音样本库"
       >
-        <div class ="card-block" style="font-weight: bold;border-bottom: 1px solid var(--el-border-color);padding: 2px;">基础声音</div>
-        <div class="basic-language">
-          <div class="block-title">语言</div>
-          <DropDownSelector
-            :visible-selection="lanConfig.visibleLanguages"
-            :has-more="true"
-            :all-selection="lanConfig.allLanguages"
-            v-model="selectedLanguage"
-          />
-        </div>
-        <div class="basic-language" style="padding-right: 0;" v-if="selectedLanguage === '中文'">
-          <div class="block-title">方言</div>
-          <DropDownSelector
-            :visible-selection="lanConfig.localLanguage"
-            :has-more="false"
-          />
-        </div>
-        <div class="basic-language">
-          <div class="block-title">风格</div>
-          <DropDownSelector
-            :visible-selection="lanConfig.langType"
-            :has-more="false"
-          />
-        </div>
-        <div class="basic-language">
-          <div class="block-title">方言</div>
-          <DropDownSelector
-            :visible-selection="['男','女']"
-            :has-more="false"
-          />
-        </div>
-        <div class="card-block" style="font-weight: bold;">
-          热门人物声音
-        </div>
-        <div class="card-block" style="font-weight: bold;">
-
-        </div>
-        <div class="card-block" style="font-weight: bold;">
-          我的声音
-        </div>
-        <div class="card-block" style="font-weight: bold;">
-
+        <div class="select-language" @click="voiceDialogVisible = true">
+          <img src="@/assets/icons/selecVoice.png" style="scale: .6;position: relative;right: 20%;top: 12%;" />
         </div>
       </Card>
+      <voiceDialog
+        v-model="voiceDialogVisible"
+      >
+      </voiceDialog>
       <Card
         title="设置"
       >
         <div class="card-block" style="justify-content: center;align-items:center;gap: 40px;">
           自动播放
           <text style="color: #9E9E9E;">转换成功后直接播放</text>
-          <el-switch />
+          <el-switch v-model="autoPlay" />
         </div>
         <div class="card-block" style="justify-content: center;align-items:center;gap: 46px;">
           试听模式
           <text style="color: #9E9E9E;">只转换前50个字符</text>
-          <el-switch />
+          <el-switch v-model="tryMode" />
         </div>
         <div class="card-block" style="justify-content: center;align-items:center;">
           <el-button type="primary" style="width: 55%;">开始转换</el-button>
@@ -137,12 +101,18 @@
 import LayOut from '@/components/layouts/LayOut.vue';
 import Card from '@/components/card/CarD.vue';
 import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue';
+import voiceDialog from '@/components/voiceDialog/voiceDialog.vue';
 import { ElInput, ElSwitch, ElButton, ElRadioGroup, ElSlider } from 'element-plus';
 import { ref } from 'vue';
 import { lanConfig } from '@/assets/constants';
 const text = ref("")
 
 const selectedLanguage = ref("")
+
+const autoPlay = ref(false)
+const tryMode = ref(false)
+
+const voiceDialogVisible = ref(false)
 </script>
 
 <style lang="scss" scoped>
@@ -187,6 +157,15 @@ const selectedLanguage = ref("")
       width: 100%;
       grid-template-columns: 1fr 9fr;
       padding: 10px 0 5px 10px;
+    }
+
+    .select-language {
+      width: 90%;
+      height: 100px;
+      border: 2px dashed #E5E7EB;
+      border-radius: 8px;
+      box-sizing: border-box;
+      cursor: pointer;
     }
   }
 

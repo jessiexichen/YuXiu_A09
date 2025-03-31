@@ -113,7 +113,6 @@
           </div>
         </div>
         <div class="card-block">
-          <el-button type="info" plain style="width: 100%" @click="Collect()"> 收藏声音</el-button>
           <el-button
             type="info"
             plain
