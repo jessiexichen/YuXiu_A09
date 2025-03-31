@@ -45,7 +45,7 @@
         title="语音样本库"
       >
         <div class="select-language" @click="voiceDialogVisible = true">
-          <img src="@/assets/icons/selecVoice.png" style="scale: .6;position: relative;right: 20%;top: 12%;" />
+          <img src="@/assets/icons/selecVoice.png" style="width: 500px;height: 55px;position: relative;left: 5%;top: 20%;" />
         </div>
       </Card>
       <voiceDialog

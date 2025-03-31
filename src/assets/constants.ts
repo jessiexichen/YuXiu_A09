@@ -1,4 +1,5 @@
 import type { navPage } from '@/types/navBar';
+import type { PopVoice } from '@/types/voice';
 
 const navPages : navPage[] = [
   {name: "首页", url: "/home"},
@@ -34,10 +35,77 @@ const lanConfig = {
 
   langType: ["标准", "温柔", "稚嫩", "活泼", "激情", "风趣"],
 }
+
+const popularVoices : PopVoice[] = [
+  {
+    id: 1,
+    name: "宋浩",
+    language: "普通话",
+    avatar: "@/assets/avatar/.png",
+    description: "好，各位同学，大家上午好，今天又开始了高等数学的学习哈。",
+  },
+  {
+    id: 2,
+    name: "雷军",
+    language: "普通话",
+    avatar: "@/assets/avatar/.png",
+    description: "用户满意度是根本。把所有精力放在改善产品和服务，让用户满意……",
+  },
+  {
+    id: 3,
+    name: "奶龙",
+    language: "普通话",
+    avatar: "@/assets/avatar/.png",
+    description: "我是奶龙，我是奶龙，我才是真正的奶龙。今夜星光闪闪，爱你的心……",
+  },
+  {
+    id: 4,
+    name: "Harry Potter",
+    language: "英语",
+    avatar: "@/assets/avatar/.png",
+    description: "Lumos Maxima，Lumos Maxima.",
+  },
+  {
+    id: 5,
+    name: "蕾姆レム",
+    language: "日语",
+    avatar: "@/assets/avatar/.png",
+    description: "まる時間、凍る心、昴が優しく溶かし、また動き出させた……",
+  },
+  {
+    id: 6,
+    name: "丁真",
+    language: "普通话",
+    avatar: "@/assets/avatar/.png",
+    description: "大家好，我是丁真。今天想跟大家分享我这里的美景...",
+  },
+  {
+    id: 7,
+    name: "李天意",
+    language: "普通话",
+    avatar: "@/assets/avatar/.png",
+    description: "我们接下来学习的随机变量，先学离散的，再学连续的。从简单到……",
+  },
+  {
+    id: 8,
+    name: "学过石油的语文老师",
+    language: "普通话",
+    avatar: "@/assets/avatar/.png",
+    description: "没文采咋办？字不好看扣分吗？作文咋提分……",
+  },
+  {
+    id: 9,
+    name: "林志玲",
+    language: "普通话",
+    avatar: "@/assets/avatar/.png",
+    description: "上天莫名其妙给了我知名度，我却只有一个大问号！如果是这……",
+  }
+]
 export {
   lanConfig,
   navPages,
-  childPages
+  childPages,
+  popularVoices
 }
 
 

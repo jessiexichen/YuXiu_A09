@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue';
+import type { Voice } from '@/types/voice';
 
 export const useCollectionStore = defineStore('collection', () => {
     // 声音数据
@@ -10,7 +11,8 @@ export const useCollectionStore = defineStore('collection', () => {
         date: "2025/2/25",
         group: "分组1",
         status: "success",
-        file: null
+        file: null,
+        description: "总是明月几时有？把酒问青天。不知天上宫阙，今夕是何年。我……",
       },
     ]);
 
@@ -26,7 +28,8 @@ export const useCollectionStore = defineStore('collection', () => {
         group: group,
         status: "success",
         //file功能之后想玩可以想想怎么接
-        file: null
+        file: null,
+        description: "",
       }
     );
     buildGroup(group);
@@ -82,12 +85,3 @@ export const useCollectionStore = defineStore('collection', () => {
 
   return { voices, groups, CollectVoice, DeleteVoice, buildGroup, restoreVoice, getVoice }
 })
-
-export type Voice = {
-  id: number;
-  name: string;
-  date: string;
-  group: string;
-  status: string;
-  file: File | null;
-}
