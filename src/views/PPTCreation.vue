@@ -50,20 +50,19 @@
       </Card>
       <voiceDialog
         v-model="voiceDialogVisible"
-      >
-      </voiceDialog>
+      />
       <Card
         title="设置"
       >
         <div class="card-block" style="justify-content: center;align-items:center;gap: 40px;">
           自动播放
           <text style="color: #9E9E9E;">转换成功后直接播放</text>
-          <el-switch />
+          <el-switch v-model="autoPlay" />
         </div>
         <div class="card-block" style="justify-content: center;align-items:center;gap: 46px;">
           试听模式
           <text style="color: #9E9E9E;">只转换前50个字符</text>
-          <el-switch />
+          <el-switch v-model="tryMode" />
         </div>
         <div class="card-block" style="justify-content: center;align-items:center;">
           <el-button type="primary" style="width: 55%;">开始转换</el-button>
@@ -80,9 +79,6 @@
            <text style="line-height: 35px;">00:07</text>
            <el-slider style="width: 200px;"/>
            <text style="line-height: 35px;">00:15</text>
-           <div style="display: flex;align-items: center;">
-            <img src="@/assets/icons/voice.png" style="width: 1.5em;height: 1.1em;" >
-          </div>
            <el-button type="primary" style="width: 140px;" @click="isShowMore=!isShowMore">
             <img src="@/assets/icons/dots.png" style="width: 0.8em;height: 1.3em;" >
             更多声音调节选项
@@ -153,6 +149,9 @@ import { ref } from 'vue';
 
 const selectedLanguage = ref("")
 
+const autoPlay = ref(true)
+const tryMode = ref(true)
+
 const isShowMore = ref(false);
 const Speed = ref("");
 const Voice = ref("");
@@ -204,7 +203,6 @@ const voiceDialogVisible = ref(false)
         align-items: start;
         flex-grow: 1;
       }
-
       .more-voice {
         display: flex;
         align-items: center;
@@ -212,6 +210,7 @@ const voiceDialogVisible = ref(false)
         gap: 20px;
         width: 100%;
         height: 30px;
+        margin-right: 40px;
       }
     }
 

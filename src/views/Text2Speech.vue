@@ -44,8 +44,7 @@
       </Card>
       <voiceDialog
         v-model="voiceDialogVisible"
-      >
-      </voiceDialog>
+      />
       <Card
         title="设置"
       >
@@ -74,13 +73,49 @@
            <text style="line-height: 35px;">00:07</text>
            <el-slider style="width: 200px;"/>
            <text style="line-height: 35px;">00:15</text>
-           <div style="display: flex;align-items: center;">
-            <img src="@/assets/icons/voice.png" style="width: 1.5em;height: 1.1em;" >
-          </div>
-           <el-button type="primary" style="width: 140px;">
+           <el-button type="primary" style="width: 140px;" @click="isShowMore=!isShowMore">
             <img src="@/assets/icons/dots.png" style="width: 0.8em;height: 1.3em;" >
             更多声音调节选项
           </el-button>
+        </div>
+        <div class="card-block">
+          <div class="more-voice" v-if="isShowMore">
+            <el-dropdown @command="SpeedSelect">
+              <el-button>
+                倍速
+                <span v-if="Speed!==''">:{{Speed}}</span>
+                <el-icon class="el-icon--right" v-else><arrow-up /></el-icon>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="0.4"><span style="width: 100%;;text-align: center;">0.4</span></el-dropdown-item>
+                  <el-dropdown-item command="0.6"><span style="width: 100%;;text-align: center;">0.6</span></el-dropdown-item>
+                  <el-dropdown-item command="0.8"><span style="width: 100%;;text-align: center;">0.8</span></el-dropdown-item>
+                  <el-dropdown-item command=""><span style="width: 100%;;text-align: center;">1.0</span></el-dropdown-item>
+                  <el-dropdown-item command="1.2"><span style="width: 100%;;text-align: center;">1.2</span></el-dropdown-item>
+                  <el-dropdown-item command="1.4"><span style="width: 100%;;text-align: center;">1.4</span></el-dropdown-item>
+                  <el-dropdown-item command="1.6"><span style="width: 100%;;text-align: center;">1.6</span></el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+            <el-dropdown @command="VoiceSelect">
+              <el-button>
+                音调<span v-if="Voice!==''">:{{Voice}}</span>
+                <el-icon class="el-icon--right" v-else><arrow-up /></el-icon>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="+50%"><span style="width: 100%;;text-align: center;">升高50%</span></el-dropdown-item>
+                  <el-dropdown-item command="+25%"><span style="width: 100%;;text-align: center;">升高25%</span></el-dropdown-item>
+                  <el-dropdown-item command="+10%"><span style="width: 100%;;text-align: center;">升高10%</span></el-dropdown-item>
+                  <el-dropdown-item command=""><span style="width: 100%;;text-align: center;">原声调</span></el-dropdown-item>
+                  <el-dropdown-item command="-10%"><span style="width: 100%;;text-align: center;">降低10%</span></el-dropdown-item>
+                  <el-dropdown-item command="-25%"><span style="width: 100%;;text-align: center;">降低25%</span></el-dropdown-item>
+                  <el-dropdown-item command="-50%"><span style="width: 100%;;text-align: center;">降低50%</span></el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </div>
         </div>
         <div class="card-block" style="justify-content: center;align-items:center;gap: 5px;padding: 10px;">
           选择音频格式
@@ -111,6 +146,17 @@ const autoPlay = ref(true)
 const tryMode = ref(true)
 
 const voiceDialogVisible = ref(false)
+const isShowMore = ref(false);
+const Speed = ref("");
+const Voice = ref("");
+
+function SpeedSelect(command: string) {
+  Speed.value = command;
+}
+function VoiceSelect(command: string) {
+  Voice.value = command;
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -148,6 +194,15 @@ const voiceDialogVisible = ref(false)
         padding-top: 6px;
         align-items: start;
         flex-grow: 1;
+      }
+      .more-voice {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        gap: 20px;
+        width: 100%;
+        height: 30px;
+        margin-right: 40px;
       }
     }
     .basic-language {

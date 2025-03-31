@@ -49,9 +49,6 @@
           <text style="line-height: 35px">00:07</text>
           <el-slider style="width: 200px"/>
           <text style="line-height: 35px">00:15</text>
-          <div style="display: flex; align-items: center">
-            <img src="@/assets/icons/voice.png" style="width: 1.5em; height: 1.1em"/>
-          </div>
           <el-button type="primary" style="width: 140px;" @click="isShowMore=!isShowMore">
             <img src="@/assets/icons/dots.png" style="width: 0.8em;height: 1.3em;">
             更多声音调节选项

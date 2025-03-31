@@ -81,9 +81,9 @@
                 shadow="hover"
               >
                 <div class="voice-content">
-                  <div class="voice-avatar">
-                    <img src="@/assets/avatar/image@1x.png" alt="人物头像" />
-                  </div>
+                  <el-avatar>
+                    <img :src=voice.avatar />
+                  </el-avatar>
                   <div class="voice-info">
                     <div class="voice-name">
                       {{ voice.name }}
