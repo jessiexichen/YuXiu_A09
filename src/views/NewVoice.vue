@@ -24,7 +24,7 @@
         <div class="card-block" style="display: block">
           <div class="upload-demo">
             <div style="margin-top: 2em; gap: 10px; display: flex">
-              <record-button/>
+              <record-button v-model:audio-url="audioUrl"/>
               <el-button type="primary" class="uploading" plain>
                 <img src="@/assets/icons/upload.png" style="margin: 7px"/>点击上传
               </el-button>
@@ -37,19 +37,9 @@
             </div>
           </div>
         </div>
-        <div class="card-block">
-          <el-button
-            type="primary"
-            style="width: 35px; height: 35px; border-radius: 100%"
-            @click="play()"
-          >
-            <img src="@/assets/icons/begin.png" style="width: 1.9em" v-if="!isPlaying"/>
-            <img src="@/assets/icons/pause.png" style="width: 0.7em" v-else/>
-          </el-button>
-          <text style="line-height: 35px">00:07</text>
-          <el-slider style="width: 200px"/>
-          <text style="line-height: 35px">00:15</text>
-          <el-button type="primary" style="width: 140px;" @click="isShowMore=!isShowMore">
+        <div class="card-block" style="display: flex;align-items: center">
+          <audio :src="audioUrl" controls style="width: 450px"></audio>
+          <el-button type="primary" size="large" style="width: 140px;" @click="isShowMore=!isShowMore">
             <img src="@/assets/icons/dots.png" style="width: 0.8em;height: 1.3em;">
             更多声音调节选项
           </el-button>
@@ -187,12 +177,8 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import RecordButton from "@/components/recordButton/recordButton.vue";
 import { useCollection } from '@/stores';
 
-const isPlaying = ref(false);
 
-function play() {
-  isPlaying.value = !isPlaying.value;
-}
-
+const audioUrl = ref("")
 const isShowMore = ref(false);
 const Speed = ref("");
 const Voice = ref("");
