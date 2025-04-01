@@ -107,6 +107,23 @@
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
+            <el-dropdown @command="VolumeSelect">
+              <el-button>
+                音量<span v-if="Volume!==''">:{{Volume}}</span>
+                <el-icon class="el-icon--right" v-else><arrow-up /></el-icon>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="50%"><span style="width: 100%;;text-align: center;">50%</span></el-dropdown-item>
+                  <el-dropdown-item command="70%"><span style="width: 100%;;text-align: center;">70%</span></el-dropdown-item>
+                  <el-dropdown-item command="90%"><span style="width: 100%;;text-align: center;">90%</span></el-dropdown-item>
+                  <el-dropdown-item command=""><span style="width: 100%;;text-align: center;">100%</span></el-dropdown-item>
+                  <el-dropdown-item command="110%"><span style="width: 100%;;text-align: center;">110%</span></el-dropdown-item>
+                  <el-dropdown-item command="130%"><span style="width: 100%;;text-align: center;">130%</span></el-dropdown-item>
+                  <el-dropdown-item command="150%"><span style="width: 100%;;text-align: center;">150%</span></el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </div>
         </div>
         <div class="card-block">
@@ -179,6 +196,7 @@ function play() {
 const isShowMore = ref(false);
 const Speed = ref("");
 const Voice = ref("");
+const Volume = ref("");
 
 function SpeedSelect(command: string) {
   Speed.value = command;
@@ -186,6 +204,10 @@ function SpeedSelect(command: string) {
 function VoiceSelect(command: string) {
   Voice.value = command;
 }
+function VolumeSelect(command: string) {
+  Volume.value = command;
+}
+
 function Collect() {
   dialogVisible.value = true;
   useCollection().buildGroup("")

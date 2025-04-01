@@ -1,5 +1,5 @@
 import type { navPage } from '@/types/navBar';
-import type { PopVoice } from '@/types/voice';
+import type { PopVoice, TranHistory } from '@/types/voice';
 
 const navPages : navPage[] = [
   {name: "首页", url: "/home"},
@@ -101,11 +101,25 @@ const popularVoices : PopVoice[] = [
     description: "上天莫名其妙给了我知名度，我却只有一个大问号！如果是这……",
   }
 ]
+
+const tranhistory : TranHistory[] = [
+  {
+    content: "《纸船——寄母亲》冰心 我从不肯妄弃了一张纸，总是留着——留着，叠成一只只很小的船儿，从舟上抛下在海里。有的被天风吹卷到舟中的窗里，有的被海浪打湿，沾在船头上。我仍是不灰心地每天的叠着，总希望有一只能流到我",
+    date: "2025-02-05",
+    voice: {
+      language: "普通话",
+      tag: "温柔",
+      sex: "女",
+    },
+    status: "已完成",
+  }
+]
 export {
   lanConfig,
   navPages,
   childPages,
-  popularVoices
+  popularVoices,
+  tranhistory
 }
 
 

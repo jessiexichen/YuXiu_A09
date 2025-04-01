@@ -15,3 +15,16 @@ export type PopVoice = {
   avatar: string;
   description: string;
 }
+
+export type TranHistory = {
+  date: string;
+  content: string;
+  status: string;
+  voice: object;
+}
+
+export type SelectedVoice = {
+  name: string;
+  language: string;
+  avatar: string;
+}

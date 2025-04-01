@@ -22,7 +22,7 @@
         <el-upload
           class="el-upload"
           drag
-          action=""
+          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
           style="display: block;"
         >
           <div style="height: 270px;display: flex;flex-direction: column;justify-content: center;align-items: center;">
@@ -31,7 +31,6 @@
               可拖拽至此上传或<em>点击上传</em>
             </div>
           </div>
-
         </el-upload>
       </div>
 
@@ -45,11 +44,27 @@
         title="语音样本库"
       >
         <div class="select-language" @click="voiceDialogVisible = true">
-          <img src="@/assets/icons/selecVoice.png" style="width: 500px;height: 55px;position: relative;left: 5%;top: 20%;" />
+          <img src="@/assets/icons/selecVoice.png" style="width: 500px;height: 55px;position: relative;left: 5%;top: 20%;" v-if="selectedVoice.name === '默认'" />
+          <div class="voice-content" v-else>
+            <el-avatar :size="50" :src="selectedVoice.avatar" />
+            <div class="voice-name">
+              {{ selectedVoice.name }}
+            </div>
+            <div class="voice-description">
+              <el-tag :type="handleType(selectedVoice.language)">{{ selectedVoice.language }}</el-tag>
+            </div>
+            <div class="icon" style="right: 60px;">
+              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" version="1.1" width="24" height="24" viewBox="0 0 24 24"><defs><clipPath id="master_svg0_185_7296"><rect x="0" y="0" width="24" height="24" rx="0"/></clipPath></defs><g clip-path="url(#master_svg0_185_7296)"><g><path d="M12,4C14.5905,4,16.893900000000002,5.23053,18.3573,7.14274L16,9.5L22,9.5L22,3.5L19.7814,5.71863C17.9494,3.452,15.1444,2,12,2C6.47715,2,2,6.47715,2,12L4,12C4,7.58172,7.58172,4,12,4ZM20,12C20,16.418300000000002,16.418300000000002,20,12,20C9.409510000000001,20,7.10605,18.7695,5.64274,16.857300000000002L8,14.5L2,14.5L2,20.5L4.21863,18.2814C6.05062,20.548,8.85557,22,12,22C17.5228,22,22,17.5228,22,12L20,12Z" fill="#A6A6A6" fill-opacity="1" style="mix-blend-mode:passthrough"/></g></g></svg>
+            </div>
+            <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" version="1.1" width="18.414228439331055" height="18.414249420166016" viewBox="0 0 18.414228439331055 18.414249420166016"><g><path d="M7.79293,9.20715L0,1.41421L1.41421,0L9.20713,7.79285L17,0L18.4142,1.41421L10.6213,9.20715L18.4142,17L17,18.4142L9.20713,10.6213L1.41421,18.4142L0,17L7.79293,9.20715Z" fill="#A6A6A6" fill-opacity="1" style="mix-blend-mode:passthrough"/></g></svg>
+            </div>
+          </div>
         </div>
       </Card>
       <voiceDialog
-        v-model="voiceDialogVisible"
+        v-model:dialog-visible="voiceDialogVisible"
+        v-model:selected-voice="selectedVoice"
       />
       <Card
         title="设置"
@@ -79,13 +94,25 @@
            <text style="line-height: 35px;">00:07</text>
            <el-slider style="width: 200px;"/>
            <text style="line-height: 35px;">00:15</text>
-           <el-button type="primary" style="width: 140px;" @click="isShowMore=!isShowMore">
-            <img src="@/assets/icons/dots.png" style="width: 0.8em;height: 1.3em;" >
-            更多声音调节选项
-          </el-button>
+           <el-dropdown @command="PageSelect">
+              <el-button>
+                <span>第{{ page }}页</span><el-icon><arrow-down /></el-icon>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="1"><span style="width: 100%;;text-align: center;">1</span></el-dropdown-item>
+                  <el-dropdown-item command="2"><span style="width: 100%;;text-align: center;">2</span></el-dropdown-item>
+                  <el-dropdown-item command="3"><span style="width: 100%;;text-align: center;">3</span></el-dropdown-item>
+                  <el-dropdown-item command="4"><span style="width: 100%;;text-align: center;">4</span></el-dropdown-item>
+                  <el-dropdown-item command="5"><span style="width: 100%;;text-align: center;">5</span></el-dropdown-item>
+                  <el-dropdown-item command="6"><span style="width: 100%;;text-align: center;">6</span></el-dropdown-item>
+                  <el-dropdown-item command="7"><span style="width: 100%;;text-align: center;">7</span></el-dropdown-item>
+                </el-dropdown-menu>
+            </template>
+           </el-dropdown>
         </div>
         <div class="card-block">
-          <div class="more-voice" v-if="isShowMore">
+          <div class="more-voice">
             <el-dropdown @command="SpeedSelect">
               <el-button>
                 倍速
@@ -121,6 +148,26 @@
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
+            <el-dropdown @command="VolumeSelect">
+              <el-button>
+                音量<span v-if="Volume!==''">:{{Volume}}</span>
+                <el-icon class="el-icon--right" v-else><arrow-up /></el-icon>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="50%"><span style="width: 100%;;text-align: center;">50%</span></el-dropdown-item>
+                  <el-dropdown-item command="70%"><span style="width: 100%;;text-align: center;">70%</span></el-dropdown-item>
+                  <el-dropdown-item command="90%"><span style="width: 100%;;text-align: center;">90%</span></el-dropdown-item>
+                  <el-dropdown-item command=""><span style="width: 100%;;text-align: center;">100%</span></el-dropdown-item>
+                  <el-dropdown-item command="110%"><span style="width: 100%;;text-align: center;">110%</span></el-dropdown-item>
+                  <el-dropdown-item command="130%"><span style="width: 100%;;text-align: center;">130%</span></el-dropdown-item>
+                  <el-dropdown-item command="150%"><span style="width: 100%;;text-align: center;">150%</span></el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+            <el-button type="primary" style="width: 140px;">
+              生成视频
+            </el-button>
           </div>
         </div>
         <div class="card-block" style="justify-content: center;align-items:center;gap: 5px;padding: 10px;">
@@ -146,21 +193,45 @@ import voiceDialog from '@/components/voiceDialog/voiceDialog.vue';
 import { ElSwitch, ElButton, ElRadioGroup, ElSlider } from 'element-plus';
 import { lanConfig } from '@/assets/constants';
 import { ref } from 'vue';
+import type { SelectedVoice } from '@/types/voice';
+import { useAvatar } from '@/stores';
 
-const selectedLanguage = ref("")
+const selectedVoice = ref<SelectedVoice>({
+  name: "默认",
+  language: "普通话",
+  avatar: useAvatar().avatarUrl,
+})
 
 const autoPlay = ref(true)
 const tryMode = ref(true)
 
-const isShowMore = ref(false);
 const Speed = ref("");
 const Voice = ref("");
+const Volume = ref("");
+
+const page = ref(1)
 
 function SpeedSelect(command: string) {
   Speed.value = command;
 }
 function VoiceSelect(command: string) {
   Voice.value = command;
+}
+function VolumeSelect(command: string) {
+  Volume.value = command;
+}
+function PageSelect(command: number) {
+  page.value = command;
+}
+
+const handleType = (language: string) => {
+  if (language === "普通话") {
+    return "success";
+  } else if (language === "日语") {
+    return "warning";
+  } else if (language === "英语") {
+    return "primary";
+  }
 }
 
 const voiceDialogVisible = ref(false)
@@ -205,8 +276,10 @@ const voiceDialogVisible = ref(false)
       }
       .more-voice {
         display: flex;
+        position: relative;
+        left: 5%;
         align-items: center;
-        justify-content: end;
+        justify-content: center;
         gap: 20px;
         width: 100%;
         height: 30px;
@@ -228,6 +301,22 @@ const voiceDialogVisible = ref(false)
       border-radius: 8px;
       box-sizing: border-box;
       cursor: pointer;
+
+      .voice-content {
+        width: 100%;
+        position: relative;
+        display: flex;
+        padding: 0 15px 0 25px;
+        height: 100%;
+        align-items: center;
+        justify-self: start;
+        gap: 20px;
+        .icon {
+          position: absolute;
+          right: 20px;
+          line-height: 50%;
+        }
+      }
     }
   }
 
