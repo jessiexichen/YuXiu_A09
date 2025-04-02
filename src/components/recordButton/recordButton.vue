@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
 import {ElNotification} from "element-plus";
-import {ref, onBeforeUnmount, defineModel} from "vue";
+import {ref, onBeforeUnmount} from "vue";
 
 const audioUrl = defineModel<string | null>("audioUrl")
 

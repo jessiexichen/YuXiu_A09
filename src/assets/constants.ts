@@ -90,7 +90,7 @@ const popularVoices : PopVoice[] = [
     id: 8,
     name: "学过石油的语文老师",
     language: "普通话",
-    avatar: "src/asseavatar/学过石油的语文老师.jpg",
+    avatar: "src/assets/avatar/学过石油的语文老师.jpg",
     description: "没文采咋办？字不好看扣分吗？作文咋提分……",
   },
   {
@@ -114,12 +114,17 @@ const tranhistory : TranHistory[] = [
     status: "已完成",
   }
 ]
+
+const audioUrlTest = [
+  "Chen-U - Libertus.mp3"
+]
 export {
   lanConfig,
   navPages,
   childPages,
   popularVoices,
-  tranhistory
+  tranhistory,
+  audioUrlTest
 }
 
 

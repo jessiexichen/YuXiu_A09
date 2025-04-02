@@ -11,14 +11,15 @@
           @input="handleSearch"
         ></el-input>
         <el-select
-          v-model="filterStatus"
-          placeholder="状态筛选"
+          v-model="filterType"
+          placeholder="类型筛选"
           style="width: 120px"
           @change="handleFilter"
         >
           <el-option label="全部" value=""></el-option>
-          <el-option label="已完成" value="completed"></el-option>
-          <el-option label="生成中" value="processing"></el-option>
+          <el-option label="语音合成" value="语音合成"></el-option>
+          <el-option label="基础视频" value="基础视频"></el-option>
+          <el-option label="讲解视频" value="讲解视频"></el-option>
         </el-select>
       </div>
 
@@ -30,22 +31,32 @@
           shadow="hover"
         >
           <div class="task-header">
+            <div>
             <span class="task-title">{{ task.title }}</span>
             <span class="task-date">{{ task.date }}</span>
-            <el-tag :type="task.status === 'completed' ? 'success' : 'info'">
+            <el-tag :type="task.status === 'completed' ? 'success' : 'warning'">
               {{ task.status === 'completed' ? '已完成' : '生成中' }}
             </el-tag>
           </div>
-          <div class="task-content">
-            <div class="task-description">{{ task.description }}</div>
-            <div class="task-meta">
+          <div class="task-meta">
               <span class="task-language">{{ task.language }}</span>
               <span class="task-style">{{ task.style }}</span>
               <span class="task-gender">{{ task.gender }}</span>
             </div>
           </div>
+
+
+          <div class="task-content">
+
+            <div class="task-description">{{ task.description }}</div>
+
+          </div>
+          <VideoDialog
+            v-model:video-src="videoUrl"
+            v-model:dialog-visible="videoDialogVisible"
+          />
           <div class="task-actions">
-            <el-button circle plain size="small"><img src="@/assets/icons/play.png" style="height: .8rem;width: .7rem;position: relative;left: 2px;" /></el-button>
+            <el-button circle plain size="small" @click="videoDialogVisible=true"><img src="@/assets/icons/play.png" style="height: .8rem;width: .7rem;position: relative;left: 2px;" /></el-button>
             <el-button icon="Download" circle plain size="small"></el-button>
             <el-button icon="Share" circle plain size="small"></el-button>
           </div>
@@ -69,6 +80,10 @@
 import { ref, computed } from "vue";
 import { ElMessage } from "element-plus";
 import LayOut from "@/components/layouts/LayOut.vue";
+import VideoDialog from "@/components/videoDialog/videoDialog.vue";
+
+const videoDialogVisible = ref(false);
+const videoUrl = ref("[Nekomoe kissaten][Make Heroine ga Oosugiru!][12][1080p][JPSC].mp4");
 
 // 任务数据
 const tasks = ref([
@@ -116,7 +131,7 @@ const tasks = ref([
 
 // 搜索框绑定
 const searchQuery = ref("");
-const filterStatus = ref("");
+const filterType = ref("");
 
 // 每页显示的任务数量
 const pageSize = ref(4);
@@ -127,7 +142,7 @@ const currentPage = ref(1);
 // 过滤后的任务列表
 const filteredTasks = computed(() => {
   const query = searchQuery.value.toLowerCase();
-  const statusFilter = filterStatus.value;
+  const typeFilter = filterType.value;
 
   return tasks.value.filter(task => {
     // 搜索框过滤
@@ -135,7 +150,7 @@ const filteredTasks = computed(() => {
                          task.description.toLowerCase().includes(query);
 
     // 状态过滤
-    const matchesStatus = statusFilter ? task.status === statusFilter : true;
+    const matchesStatus = typeFilter ? task.title === typeFilter : true;
 
     return matchesSearch && matchesStatus;
   });
@@ -200,6 +215,7 @@ const shareAudio = (task) => {
 
 .task-header {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
@@ -230,6 +246,9 @@ const shareAudio = (task) => {
 
 .task-meta {
   display: flex;
+  width: 100%;
+  position: relative;
+  left: 2%;
   gap: 10px;
   font-size: 12px;
   color: #666;

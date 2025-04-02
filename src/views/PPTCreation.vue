@@ -22,7 +22,9 @@
         <el-upload
           class="el-upload"
           drag
-          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+          :action="uploadUrl"
+          :before-upload="beforeUpload"
+          :http-request="handleUpload"
           style="display: block;"
         >
           <div style="height: 270px;display: flex;flex-direction: column;justify-content: center;align-items: center;">
@@ -53,11 +55,8 @@
             <div class="voice-description">
               <el-tag :type="handleType(selectedVoice.language)">{{ selectedVoice.language }}</el-tag>
             </div>
-            <div class="icon" style="right: 60px;">
-              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" version="1.1" width="24" height="24" viewBox="0 0 24 24"><defs><clipPath id="master_svg0_185_7296"><rect x="0" y="0" width="24" height="24" rx="0"/></clipPath></defs><g clip-path="url(#master_svg0_185_7296)"><g><path d="M12,4C14.5905,4,16.893900000000002,5.23053,18.3573,7.14274L16,9.5L22,9.5L22,3.5L19.7814,5.71863C17.9494,3.452,15.1444,2,12,2C6.47715,2,2,6.47715,2,12L4,12C4,7.58172,7.58172,4,12,4ZM20,12C20,16.418300000000002,16.418300000000002,20,12,20C9.409510000000001,20,7.10605,18.7695,5.64274,16.857300000000002L8,14.5L2,14.5L2,20.5L4.21863,18.2814C6.05062,20.548,8.85557,22,12,22C17.5228,22,22,17.5228,22,12L20,12Z" fill="#A6A6A6" fill-opacity="1" style="mix-blend-mode:passthrough"/></g></g></svg>
-            </div>
             <div class="icon">
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" version="1.1" width="18.414228439331055" height="18.414249420166016" viewBox="0 0 18.414228439331055 18.414249420166016"><g><path d="M7.79293,9.20715L0,1.41421L1.41421,0L9.20713,7.79285L17,0L18.4142,1.41421L10.6213,9.20715L18.4142,17L17,18.4142L9.20713,10.6213L1.41421,18.4142L0,17L7.79293,9.20715Z" fill="#A6A6A6" fill-opacity="1" style="mix-blend-mode:passthrough"/></g></svg>
+              <img src="@/assets/icons/restore.svg">
             </div>
           </div>
         </div>
@@ -80,33 +79,34 @@
           <el-switch v-model="tryMode" />
         </div>
         <div class="card-block" style="justify-content: center;align-items:center;">
-          <el-button type="primary" style="width: 55%;">开始转换</el-button>
+          <el-button type="primary" style="width: 55%;" @click="transformDialogVisible = !transformDialogVisible">开始转换</el-button>
         </div>
+        <TransformDialog
+          v-model="transformDialogVisible"
+          v-model:audio-visible="audioVisible"
+        />
       </Card>
       <Card
         title="调节音频"
+        v-if="audioVisible"
       >
         <div class="card-block" style="justify-content: center;align-items:center;gap: 15px;">
-          <el-button type="primary" style="width: 35px;height: 35px;border-radius: 100%;">
-            <img src="@/assets/icons/begin.png" style="width: 1.9em;">
-            <!-- <img src="@/assets/icons/pause.png" style="width: 0.8em;"> -->
-          </el-button>
-           <text style="line-height: 35px;">00:07</text>
-           <el-slider style="width: 200px;"/>
-           <text style="line-height: 35px;">00:15</text>
+            <Audio
+              v-model="newTime"
+            />
            <el-dropdown @command="PageSelect">
               <el-button>
                 <span>第{{ page }}页</span><el-icon><arrow-down /></el-icon>
               </el-button>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item command="1"><span style="width: 100%;;text-align: center;">1</span></el-dropdown-item>
-                  <el-dropdown-item command="2"><span style="width: 100%;;text-align: center;">2</span></el-dropdown-item>
-                  <el-dropdown-item command="3"><span style="width: 100%;;text-align: center;">3</span></el-dropdown-item>
-                  <el-dropdown-item command="4"><span style="width: 100%;;text-align: center;">4</span></el-dropdown-item>
-                  <el-dropdown-item command="5"><span style="width: 100%;;text-align: center;">5</span></el-dropdown-item>
-                  <el-dropdown-item command="6"><span style="width: 100%;;text-align: center;">6</span></el-dropdown-item>
-                  <el-dropdown-item command="7"><span style="width: 100%;;text-align: center;">7</span></el-dropdown-item>
+              <template #dropdown >
+                <el-dropdown-menu @click="updateTime()">
+                  <el-dropdown-item command=1><span style="width: 100%;;text-align: center;">1</span></el-dropdown-item>
+                  <el-dropdown-item command=2><span style="width: 100%;;text-align: center;">2</span></el-dropdown-item>
+                  <el-dropdown-item command=3><span style="width: 100%;;text-align: center;">3</span></el-dropdown-item>
+                  <el-dropdown-item command=4><span style="width: 100%;;text-align: center;">4</span></el-dropdown-item>
+                  <el-dropdown-item command=5><span style="width: 100%;;text-align: center;">5</span></el-dropdown-item>
+                  <el-dropdown-item command=6><span style="width: 100%;;text-align: center;">6</span></el-dropdown-item>
+                  <el-dropdown-item command=7><span style="width: 100%;;text-align: center;">7</span></el-dropdown-item>
                 </el-dropdown-menu>
             </template>
            </el-dropdown>
@@ -165,21 +165,39 @@
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
-            <el-button type="primary" style="width: 140px;">
+            <el-button type="primary" style="width: 140px;" @click="buidVideo()">
               生成视频
             </el-button>
+            <el-dialog
+              v-model="videoDialogVisible"
+              title="正在生成视频"
+              width="30%"
+              :close-on-click-modal="false"
+              :close-on-press-escape="false"
+              :show-close="false"
+              align-center
+            >
+              <div v-if="isGenerating">
+                <el-progress :percentage="progress" :text-inside="true" :stroke-width="24" />
+                <div style="margin-top: 20px; text-align: center;">
+                  请稍后...
+                </div>
+              </div>
+              <div v-else>
+                <div style="text-align: center; font-size: 18px; color: #67C23A;">
+                  生成成功
+                </div>
+                <div style="text-align: center; margin-top: 15px;">
+                  请到生成历史查看
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                  <el-link type="primary" :underline="true" @click="goToHistory">
+                    <strong style="font-weight: bold; text-decoration: underline;">跳转</strong>
+                  </el-link>
+                </div>
+              </div>
+            </el-dialog>
           </div>
-        </div>
-        <div class="card-block" style="justify-content: center;align-items:center;gap: 5px;padding: 10px;">
-          选择音频格式
-          <el-radio-group>
-            <el-radio label="mp3" />
-            <el-radio label="ogg" />
-            <el-radio label="aac" />
-            <el-radio label="opus" />
-            <el-radio label="wav" />
-          </el-radio-group>
-          <el-button type="primary">一键导入</el-button>
         </div>
       </Card>
     </div>
@@ -190,11 +208,15 @@ import LayOut from '@/components/layouts/LayOut.vue';
 import Card from '@/components/card/CarD.vue';
 import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue';
 import voiceDialog from '@/components/voiceDialog/voiceDialog.vue';
-import { ElSwitch, ElButton, ElRadioGroup, ElSlider } from 'element-plus';
+import { ElSwitch, ElButton, ElMessage } from 'element-plus';
 import { lanConfig } from '@/assets/constants';
 import { ref } from 'vue';
 import type { SelectedVoice } from '@/types/voice';
 import { useAvatar } from '@/stores';
+import TransformDialog from '@/components/transformDialog/transformDialog.vue';
+import Audio from '@/components/audio/audio.vue';
+import router from '@/router';
+
 
 const selectedVoice = ref<SelectedVoice>({
   name: "默认",
@@ -235,6 +257,145 @@ const handleType = (language: string) => {
 }
 
 const voiceDialogVisible = ref(false)
+const videoDialogVisible = ref(false)
+const transformDialogVisible = ref(false)
+const audioVisible = ref(false)
+
+//PPT上传
+const uploadUrl = "https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+
+const beforeUpload = (file) => {
+  // 检查文件类型
+  const isPPT = file.type === "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
+                file.type === "application/vnd.ms-powerpoint";
+  const isLt20MB = file.size / 1024 / 1024 < 20;
+
+  if (!isPPT) {
+    ElMessage.error("只能上传PPT或PPTX文件！");
+    return false;
+  }
+  if (!isLt20MB) {
+    ElMessage.error("上传的PPT文件大小不能超过20MB！");
+    return false;
+  }
+  return true;
+};
+
+const newTime = ref(0)
+//用来实现变化页面然后更新时间
+const updateTime = () => {
+  if(page.value == 1){
+    newTime.value = 7;
+  }
+  if(page.value == 2){
+    newTime.value = 15;
+  }
+  if(page.value == 3){
+    newTime.value = 30;
+  }
+  if(page.value == 4){
+    newTime.value = 45;
+  }
+  if(page.value == 5){
+    newTime.value = 60;
+  }
+  if(page.value == 6){
+    newTime.value = 75;
+  }
+}
+
+const buidVideo = () => {
+  videoDialogVisible.value = true;
+  startGenerating();
+}
+    // 是否正在生成
+    const isGenerating = ref(true);
+    // 生成进度
+    const progress = ref(0);
+    // 定时器
+    let timer: any = null;
+
+    // 开始生成
+    const startGenerating = () => {
+      isGenerating.value = true;
+      progress.value = 0;
+
+      // 模拟生成进度
+      timer = setInterval(() => {
+        progress.value += 10;
+        if (progress.value >= 100) {
+          clearInterval(timer);
+          setTimeout(() => {
+            isGenerating.value = false;
+          }, 500);
+        }
+      }, 500);
+    };
+
+    // 跳转到生成历史
+const goToHistory = () => {
+  router.push('/tranhistory');
+  ElMessage.success('跳转到生成历史');
+  // 这里可以实现跳转逻辑
+  videoDialogVisible.value = false;
+  closeDialog()
+};
+
+// 关闭弹窗时清理定时器
+const closeDialog = () => {
+  clearInterval(timer);
+};
+</script>
+
+<script lang="ts">
+    // 模拟上传处理函数
+    function handleUpload(file) {
+      // 阻止默认上传行为
+      const isPPT = file.file.type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' ||
+                    file.file.type === 'application/vnd.ms-powerpoint';
+
+      if (!isPPT) {
+        this.$message.error('只能上传PPT文件');
+        return;
+      }
+
+      const isLt20M = file.file.size / 1024 / 1024 < 20;
+      if (!isLt20M) {
+        this.$message.error('上传的文件大小不能超过 20MB!');
+        return;
+      }
+
+      // 模拟上传进度
+      const progress = {
+        percent: 0,
+        status: 'uploading'
+      };
+
+      showProgress(progress);
+
+      // 模拟上传过程
+      setTimeout(() => {
+        // 模拟上传完成
+        progress.percent = 100;
+        progress.status = 'success';
+        showProgress(progress);
+
+        // 模拟上传成功后的回调
+        ElMessage.success('上传成功');
+
+        // 这里可以处理上传成功后的逻辑
+        console.log('文件上传成功:', file.file.name);
+      }, 2000);
+    }
+
+    // 显示上传进度
+    function showProgress(progress) {
+      ElMessage.info(`上传进度: ${progress.percent}%`);
+
+      // 如果需要显示进度条，可以在这里实现
+      // 例如使用 Element Plus 的 el-progress 组件
+    }
+
 </script>
 
 <style lang="scss" scoped>

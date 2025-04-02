@@ -8,19 +8,19 @@
             <div class="basic-language">
               <div class="block-title">语言</div>
               <DropDownSelector :visible-selection="lanConfig.visibleLanguages" :has-more="true"
-                :all-selection="lanConfig.allLanguages" v-model="selectedLanguage" />
+                :all-selection="lanConfig.allLanguages" v-model="selectedLanguage.language" />
             </div>
-            <div class="basic-language" style="padding-right: 0;" v-if="selectedLanguage === '中文'">
+            <div class="basic-language" style="padding-right: 0;" v-if="selectedLanguage.language === '中文'">
               <div class="block-title">方言</div>
-              <DropDownSelector :visible-selection="lanConfig.localLanguage" :has-more="false" />
+              <DropDownSelector :visible-selection="lanConfig.localLanguage" :has-more="false" v-model="selectedLanguage.localLanguage" />
             </div>
             <div class="basic-language">
               <div class="block-title">风格</div>
-              <DropDownSelector :visible-selection="lanConfig.langType" :has-more="false" />
+              <DropDownSelector :visible-selection="lanConfig.langType" :has-more="false" v-model="selectedLanguage.langType" />
             </div>
             <div class="basic-language">
-              <div class="block-title">方言</div>
-              <DropDownSelector :visible-selection="['男', '女']" :has-more="false" />
+              <div class="block-title">性别</div>
+              <DropDownSelector :visible-selection="['男', '女']" :has-more="false" v-model="selectedLanguage.sex" />
             </div>
             <div class="dialog-footer">
               <el-button @click="handleClose">取消</el-button>
@@ -118,12 +118,10 @@ import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue
 import { useAvatar, useCollection } from "@/stores";
 import router from "@/router";
 import type { PopVoice, Voice } from "@/types/voice";
+import type { SelectedVoice } from "@/types/voice";
+import { ElMessage } from "element-plus";
 
-const selectedVoice = defineModel<{
-  name: string;
-  language: string;
-  avatar: string;
-}>("selectedVoice");
+const selectedVoice = defineModel<SelectedVoice>("selectedVoice");
 
 // 对话框是否可见
 const dialogVisible = defineModel<boolean>("dialogVisible");
@@ -134,13 +132,40 @@ const activeTab = ref("popular");
 // 关闭对话框
 const handleClose = () => {
   dialogVisible.value = false;
+  selectedLanguage.value.langType = undefined;
+  selectedLanguage.value.localLanguage = undefined;
+  selectedLanguage.value.language = undefined;
+  selectedLanguage.value.sex = undefined;
 };
 
 // 使用声音
 function useNormVoice() {
-  console.log(1)
+
+  if (!selectedVoice.value) return;
+  if(selectedVoice.value.tags) selectedVoice.value.tags = [];
+
+  if(selectedLanguage.value.language === undefined) {
+    ElMessage.error("有未选择的tag");return;
+  }
+
+  if(selectedLanguage.value.langType === undefined) {ElMessage.error("有未选择的tag");return;}
+  if(selectedLanguage.value.sex === undefined) {ElMessage.error("有未选择的tag");return;}
+  selectedVoice.value.type = "normal";
+  if(selectedLanguage.value.language === "中文") {
+    if(selectedLanguage.value.localLanguage === undefined) {ElMessage.error("有未选择的tag");return;}
+    selectedVoice.value.tags.push(selectedLanguage.value.localLanguage);
+  }
+  else {
+    selectedVoice.value.tags.push(selectedLanguage.value.language);
+  }
+  selectedVoice.value.tags.push(selectedLanguage.value.langType, selectedLanguage.value.sex);
+
+  selectedVoice.value.type = "normal";
+  handleClose();
 }
 function usePopVoice(voice: PopVoice) {
+  if(selectedVoice.value?.type) selectedVoice.value.type = "";
+
   if (!selectedVoice.value) return;
   selectedVoice.value.name = voice.name;
   selectedVoice.value.language = voice.language;
@@ -148,13 +173,15 @@ function usePopVoice(voice: PopVoice) {
   handleClose();
 };
 function useMyVoice(voice: Voice) {
+  if(selectedVoice.value?.type) selectedVoice.value.type = "";
+
   if (!selectedVoice.value) return;
   selectedVoice.value.name = voice.name;
   selectedVoice.value.language = "普通话";
   selectedVoice.value.avatar = useAvatar().avatarUrl;
   handleClose();
 };
-const selectedLanguage = ref("")
+const selectedLanguage = ref({language: undefined, localLanguage: undefined, langType: undefined, sex: undefined});
 const selectedLanguage1 = ref("")
 const searchQuery = ref("")
 

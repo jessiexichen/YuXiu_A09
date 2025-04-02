@@ -39,7 +39,15 @@
         title="语音样本库"
       >
         <div class="select-language" @click="voiceDialogVisible = true">
-          <img src="@/assets/icons/selecVoice.png" style="width: 500px;height: 55px;position: relative;left: 5%;top: 20%;" v-if="selectedVoice.name==='默认'" />
+          <img src="@/assets/icons/selecVoice.png" style="width: 500px;height: 55px;position: relative;left: 5%;top: 20%;" v-if="selectedVoice.name==='默认' && selectedVoice.type === ''" />
+          <div class="voice-content" v-else-if="selectedVoice.type === 'normal'">
+            <div class="voice-description" v-for="tag in selectedVoice.tags" :key="tag">
+              <el-tag :type="handleType(tag)">{{ tag }}</el-tag>
+            </div>
+            <div class="icon">
+              <img src="@/assets/icons/restore.svg">
+            </div>
+          </div>
           <div class="voice-content" v-else>
             <el-avatar :size="50" :src="selectedVoice.avatar" />
             <div class="voice-name">
@@ -48,11 +56,8 @@
             <div class="voice-description">
               <el-tag :type="handleType(selectedVoice.language)">{{ selectedVoice.language }}</el-tag>
             </div>
-            <div class="icon" style="right: 60px;">
-              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" version="1.1" width="24" height="24" viewBox="0 0 24 24"><defs><clipPath id="master_svg0_185_7296"><rect x="0" y="0" width="24" height="24" rx="0"/></clipPath></defs><g clip-path="url(#master_svg0_185_7296)"><g><path d="M12,4C14.5905,4,16.893900000000002,5.23053,18.3573,7.14274L16,9.5L22,9.5L22,3.5L19.7814,5.71863C17.9494,3.452,15.1444,2,12,2C6.47715,2,2,6.47715,2,12L4,12C4,7.58172,7.58172,4,12,4ZM20,12C20,16.418300000000002,16.418300000000002,20,12,20C9.409510000000001,20,7.10605,18.7695,5.64274,16.857300000000002L8,14.5L2,14.5L2,20.5L4.21863,18.2814C6.05062,20.548,8.85557,22,12,22C17.5228,22,22,17.5228,22,12L20,12Z" fill="#A6A6A6" fill-opacity="1" style="mix-blend-mode:passthrough"/></g></g></svg>
-            </div>
             <div class="icon">
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="none" version="1.1" width="18.414228439331055" height="18.414249420166016" viewBox="0 0 18.414228439331055 18.414249420166016"><g><path d="M7.79293,9.20715L0,1.41421L1.41421,0L9.20713,7.79285L17,0L18.4142,1.41421L10.6213,9.20715L18.4142,17L17,18.4142L9.20713,10.6213L1.41421,18.4142L0,17L7.79293,9.20715Z" fill="#A6A6A6" fill-opacity="1" style="mix-blend-mode:passthrough"/></g></svg>
+              <img src="@/assets/icons/restore.svg">
             </div>
           </div>
         </div>
@@ -75,25 +80,27 @@
           <el-switch v-model="tryMode" />
         </div>
         <div class="card-block" style="justify-content: center;align-items:center;">
-          <el-button type="primary" style="width: 55%;">开始转换</el-button>
+          <el-button type="primary" style="width: 55%;" @click="transformDialogVisible = !transformDialogVisible;">开始转换</el-button>
         </div>
+        <TransformDialog
+          v-model="transformDialogVisible"
+          v-model:audio-visible="audioVisible"
+        />
       </Card>
       <Card
         title="调节音频"
+        v-if="audioVisible"
       >
-        <div class="card-block" style="justify-content: center;align-items:center;gap: 15px;">
-          <el-button type="primary" style="width: 35px;height: 35px;border-radius: 100%;">
-            <img src="@/assets/icons/begin.png" style="width: 1.9em;">
-            <!-- <img src="@/assets/icons/pause.png" style="width: 0.8em;"> -->
-          </el-button>
-           <text style="line-height: 35px;">00:07</text>
-           <el-slider style="width: 200px;"/>
-           <text style="line-height: 35px;">00:15</text>
+        <div class="card-block" style="align-items: center;justify-content: center;gap: 15px;">
+          <Audio
+            v-model="newTime"
+          />
            <el-button type="primary" style="width: 140px;" @click="isShowMore=!isShowMore">
             <img src="@/assets/icons/dots.png" style="width: 0.8em;height: 1.3em;" >
             更多声音调节选项
           </el-button>
         </div>
+
         <div class="card-block">
           <div class="more-voice" v-if="isShowMore">
             <el-dropdown @command="SpeedSelect">
@@ -152,14 +159,14 @@
         </div>
         <div class="card-block" style="justify-content: center;align-items:center;gap: 5px;padding: 10px;">
           选择音频格式
-          <el-radio-group>
+          <el-radio-group v-model="audioFormat">
             <el-radio label="mp3" />
             <el-radio label="ogg" />
             <el-radio label="aac" />
             <el-radio label="opus" />
             <el-radio label="wav" />
           </el-radio-group>
-          <el-button type="primary">下载音频</el-button>
+          <el-button type="primary" @click="downloadAudio()">下载音频</el-button>
         </div>
       </Card>
     </div>
@@ -170,11 +177,14 @@ import LayOut from '@/components/layouts/LayOut.vue';
 import Card from '@/components/card/CarD.vue';
 import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue';
 import voiceDialog from '@/components/voiceDialog/voiceDialog.vue';
-import { ElInput, ElSwitch, ElButton, ElRadioGroup, ElSlider } from 'element-plus';
+import { ElInput, ElSwitch, ElButton, ElRadioGroup } from 'element-plus';
 import { ref } from 'vue';
-import { lanConfig } from '@/assets/constants';
+import { audioUrlTest, lanConfig } from '@/assets/constants';
 import type { SelectedVoice } from '@/types/voice';
 import { useAvatar } from '@/stores';
+import TransformDialog from '@/components/transformDialog/transformDialog.vue';
+import Audio from '@/components/audio/audio.vue';
+
 const text = ref("")
 
 const autoPlay = ref(true)
@@ -197,6 +207,8 @@ function VolumeSelect(command: string) {
 }
 
 const selectedVoice = ref<SelectedVoice>({
+  type: "",
+  tags: ["普通话"],
   name: "默认",
   language: "普通话",
   avatar: useAvatar().avatarUrl,
@@ -212,6 +224,20 @@ const handleType = (language: string) => {
   }
 }
 
+const transformDialogVisible = ref(false)
+
+const audioVisible = ref(false)
+const newTime = ref(0)
+const audioFormat = ref("mp3")
+
+const downloadAudio = () => {
+  const a = document.createElement('a');
+  a.href = audioUrlTest[0];
+  a.download = audioUrlTest[0]; // 设置下载的文件名
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+};
 </script>
 
 <style lang="scss" scoped>

@@ -24,6 +24,8 @@ export type TranHistory = {
 }
 
 export type SelectedVoice = {
+  type: string;
+  tags: string[];
   name: string;
   language: string;
   avatar: string;

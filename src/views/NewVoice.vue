@@ -39,7 +39,7 @@
         </div>
         <div class="card-block" style="display: flex;align-items: center">
           <audio :src="audioUrl" controls style="width: 450px"></audio>
-          <el-button type="primary" size="large" style="width: 140px;" @click="isShowMore=!isShowMore">
+          <el-button type="info" size="large" style="width: 140px;opacity: .5;" @click="isShowMore=!isShowMore">
             <img src="@/assets/icons/dots.png" style="width: 0.8em;height: 1.3em;">
             更多声音调节选项
           </el-button>
