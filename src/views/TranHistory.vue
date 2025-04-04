@@ -26,38 +26,37 @@
       <div class="task-list">
         <el-card
           v-for="task in filteredTasks"
-          :key="task.id"
+          :key="task.content"
           class="task-card"
           shadow="hover"
         >
           <div class="task-header">
-            <div>
-            <span class="task-title">{{ task.title }}</span>
-            <span class="task-date">{{ task.date }}</span>
-            <el-tag :type="task.status === 'completed' ? 'success' : 'warning'">
-              {{ task.status === 'completed' ? '已完成' : '生成中' }}
-            </el-tag>
-          </div>
-          <div class="task-meta">
-              <span class="task-language">{{ task.language }}</span>
-              <span class="task-style">{{ task.style }}</span>
-              <span class="task-gender">{{ task.gender }}</span>
+            <div style="width: 100%;">
+              <span class="task-title">{{ task.type }}</span>
+              <span class="task-date">{{ task.date }}</span>
+              <el-tag :type="task.status === '已完成' ? 'success' : 'warning'">
+                {{ task.status === '已完成' ? '已完成' : '生成中' }}
+              </el-tag>
+            </div>
+            <div class="task-meta">
+              <span v-for="tag in task.tags" :key="tag" style="color: #6B7280;">{{ tag }}</span>
+            </div>
+            <div class="task-meta" style="color: #6B7280;" v-if="task.sourceUrl!==''">
+              <span>{{ task.sourceUrl }}</span>
             </div>
           </div>
 
 
           <div class="task-content">
-
-            <div class="task-description">{{ task.description }}</div>
-
+            <div class="task-description">{{ task.content }}</div>
           </div>
           <VideoDialog
             v-model:video-src="videoUrl"
             v-model:dialog-visible="videoDialogVisible"
           />
           <div class="task-actions">
-            <el-button circle plain size="small" @click="videoDialogVisible=true"><img src="@/assets/icons/play.png" style="height: .8rem;width: .7rem;position: relative;left: 2px;" /></el-button>
-            <el-button icon="Download" circle plain size="small"></el-button>
+            <el-button circle plain size="small" @click="startPlay(task.sourceUrl)"><img src="@/assets/icons/play.png" style="height: .8rem;width: .7rem;position: relative;left: 2px;" /></el-button>
+            <el-button icon="Download" circle plain size="small" @click="downloadAudio(task.sourceUrl)"></el-button>
             <el-button icon="Share" circle plain size="small"></el-button>
           </div>
         </el-card>
@@ -77,57 +76,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { ElMessage } from "element-plus";
 import LayOut from "@/components/layouts/LayOut.vue";
 import VideoDialog from "@/components/videoDialog/videoDialog.vue";
+import { tranhistory } from "@/assets/constants";
+import { vi } from "element-plus/es/locales.mjs";
 
 const videoDialogVisible = ref(false);
 const videoUrl = ref("[Nekomoe kissaten][Make Heroine ga Oosugiru!][12][1080p][JPSC].mp4");
-
-// 任务数据
-const tasks = ref([
-  {
-    id: 1,
-    title: "语音合成",
-    date: "2025-02-25 10:08",
-    status: "completed",
-    description: "《纸船一一寄母亲》冰心 我从不肯妄弃了一张纸，总是留着--留着，叠成一只只很小的船儿，从舟上抛下在海里。有的被天风吹卷到舟中的窗里，有的被海浪打湿，沾在船头上。我仍是不灰心地每天的叠着，总希望有一只能流到我",
-    language: "普通话",
-    style: "温柔",
-    gender: "女",
-  },
-  {
-    id: 2,
-    title: "语音合成",
-    date: "2025-02-25 10:10",
-    status: "completed",
-    description: "定理 7（极限审敛法 2）设函数f(x)在区间 (a, b]上连续且f(x)≥0，x = a 为 f(x)的瑕点。如果存在常数 0 < q < 1，使得lim_{x→a^+} (x-a)^q f(x)存在，那么反常积分 ∫_{a}^{b} f(x) dx 收敛；如果lim_{x→a^+} (x-a) f(x) = d > 0 或 lim_{x→a^+} f(x) = +∞",
-    language: "普通话",
-    style: "标准",
-    gender: "男",
-  },
-  {
-    id: 3,
-    title: "基础视频",
-    date: "2025-02-25 10:12",
-    status: "processing",
-    description: "DNA是主要的遗传物质 课程导入 龙生龙，凤生凤，老鼠的儿子会打洞。人们通常将生物亲代与子代之间相似的现象，叫做遗传。商品条形码上包含着商品名称、价格、生产日期等信息。俗话说“种瓜得瓜，种豆得豆”是因为亲代将自己的生命信息传递给了子代。在生物体内有没有隐含着",
-    language: "普通话",
-    style: "标准",
-    gender: "男",
-  },
-  {
-    id: 4,
-    title: "类别名称",
-    date: "2025-02-25 10:15",
-    status: "completed",
-    description: "语音文本能显示多少就显示多少h",
-    language: "普通话",
-    style: "标准",
-    gender: "女",
-  },
-]);
 
 // 搜索框绑定
 const searchQuery = ref("");
@@ -144,13 +101,14 @@ const filteredTasks = computed(() => {
   const query = searchQuery.value.toLowerCase();
   const typeFilter = filterType.value;
 
-  return tasks.value.filter(task => {
+  return tranhistory.filter(task => {
     // 搜索框过滤
-    const matchesSearch = task.title.toLowerCase().includes(query) ||
-                         task.description.toLowerCase().includes(query);
+    const matchesSearch = task.content.toLowerCase().includes(query) ||
+                         task.tags.forEach(tag => tag.includes(query)) ||
+                         task.sourceUrl.includes(query);
 
     // 状态过滤
-    const matchesStatus = typeFilter ? task.title === typeFilter : true;
+    const matchesStatus = typeFilter ? task.type === typeFilter : true;
 
     return matchesSearch && matchesStatus;
   });
@@ -167,27 +125,31 @@ const handleFilter = () => {
 };
 
 // 分页功能
-const handlePageChange = (page) => {
+const handlePageChange = (page:number) => {
   currentPage.value = page;
 };
 
-// 播放按钮点击事件
-const playAudio = (task) => {
-  ElMessage.info(`播放 ${task.title}`);
-  // 这里可以添加播放音频的逻辑
-};
-
 // 下载按钮点击事件
-const downloadAudio = (task) => {
-  ElMessage.info(`下载 ${task.title}`);
-  // 这里可以添加下载音频的逻辑
+const downloadAudio = (url: string) => {
+  ElMessage.info(`下载 ${url}`);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = url; // 设置下载的文件名
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 };
 
-// 分享按钮点击事件
-const shareAudio = (task) => {
-  ElMessage.info(`分享 ${task.title}`);
-  // 这里可以添加分享音频的逻辑
-};
+// // 分享按钮点击事件
+// const shareAudio = (task) => {
+//   ElMessage.info(`分享 ${task.title}`);
+//   // 这里可以添加分享音频的逻辑
+// };
+const startPlay = (url: string) => {
+  videoUrl.value = url;
+  console.log(videoUrl.value)
+  videoDialogVisible.value = true;
+}
 </script>
 
 <style scoped>
@@ -248,7 +210,6 @@ const shareAudio = (task) => {
   display: flex;
   width: 100%;
   position: relative;
-  left: 2%;
   gap: 10px;
   font-size: 12px;
   color: #666;

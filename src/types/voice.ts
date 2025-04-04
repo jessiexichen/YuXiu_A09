@@ -14,13 +14,16 @@ export type PopVoice = {
   language: string;
   avatar: string;
   description: string;
+  sample: string;
 }
 
 export type TranHistory = {
+  type: "语音合成" | "基础视频" | "讲解视频" | "构建声音";
   date: string;
   content: string;
   status: string;
-  voice: object;
+  tags: string[];
+  sourceUrl: string;
 }
 
 export type SelectedVoice = {

@@ -54,7 +54,8 @@
                           voice.language }}</el-tag>
                       </div>
                       <div class="voice-description">
-                        <img src="@/assets/icons/play.png" style="width: 1em;height: 1.2em;">
+                        <img src="@/assets/icons/play.png" style="width: 1em;height: 1.2em;cursor: pointer;" @click="playVoice(voice.sample, voice.id);" v-if="isPlaying !== voice.id">
+                        <img src="@/assets/icons/pause2.png" style="width: 1.1em;height: 1.1em;cursor: pointer;"  v-else>
                         <span style="position: relative;bottom: 3px;left: 10px;">{{ voice.description }}</span>
                       </div>
                     </div>
@@ -73,7 +74,7 @@
               <el-input v-model="searchQuery" placeholder="搜索" prefix-icon="Search" clearable
                 style="width: 50%; margin-right: 10px"></el-input>
               <span>分组</span>
-              <el-select v-model="filterGroup" placeholder="选择语言" style="width: 20%; margin-left: 10px" clearable>
+              <el-select v-model="filterGroup" placeholder="选择分组" style="width: 20%; margin-left: 10px" clearable>
                 <el-option label="全部" value=""></el-option>
                 <el-option v-for="group in useCollection().groups" :key="group" :label="group"
                   :value="group"></el-option>
@@ -193,6 +194,23 @@ const handleType = (language: string) => {
   } else if (language === "英语") {
     return "primary";
   }
+}
+const isPlaying = ref<number>();
+function playVoice(audioUrl: string, id: number) {
+  isPlaying.value = id;
+  const audio = new Audio();
+  audio.src = audioUrl;
+  audio.play();
+  let timer: number = 0;
+  timer = setInterval(() => {
+    if (audio.currentTime >= audio.duration) {
+      clearInterval(timer);
+      setTimeout(() => {
+        audio.src = "";
+        isPlaying.value = undefined;
+      }, 100);
+    }
+  }, 1000);
 }
 
 const filteredPopularVoices = computed(() => {

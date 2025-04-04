@@ -45,8 +45,16 @@
       <Card
         title="语音样本库"
       >
-        <div class="select-language" @click="voiceDialogVisible = true">
-          <img src="@/assets/icons/selecVoice.png" style="width: 500px;height: 55px;position: relative;left: 5%;top: 20%;" v-if="selectedVoice.name === '默认'" />
+      <div class="select-language" @click="voiceDialogVisible = true">
+          <img src="@/assets/icons/selecVoice.png" style="width: 500px;height: 55px;position: relative;left: 5%;top: 20%;" v-if="selectedVoice.name==='默认' && selectedVoice.type === ''" />
+          <div class="voice-content" v-else-if="selectedVoice.type === 'normal'">
+            <div class="voice-description" v-for="tag in selectedVoice.tags" :key="tag">
+              <el-tag :type="handleType(tag)">{{ tag }}</el-tag>
+            </div>
+            <div class="icon">
+              <img src="@/assets/icons/restore.svg">
+            </div>
+          </div>
           <div class="voice-content" v-else>
             <el-avatar :size="50" :src="selectedVoice.avatar" />
             <div class="voice-name">
@@ -78,8 +86,13 @@
           <text style="color: #9E9E9E;">只转换前50个字符</text>
           <el-switch v-model="tryMode" />
         </div>
+        <div class="card-block" style="justify-content: center;align-items:center;gap: 55px;">
+          讲解模式
+          <text style="color: #9E9E9E;">增加额外的讲解</text>
+          <el-switch v-model="specialistMode" />
+        </div>
         <div class="card-block" style="justify-content: center;align-items:center;">
-          <el-button type="primary" style="width: 55%;" @click="transformDialogVisible = !transformDialogVisible">开始转换</el-button>
+          <el-button type="primary" style="width: 55%;" @click="startTransform()">开始转换</el-button>
         </div>
         <TransformDialog
           v-model="transformDialogVisible"
@@ -93,22 +106,16 @@
         <div class="card-block" style="justify-content: center;align-items:center;gap: 15px;">
             <Audio
               v-model="newTime"
+              v-model:is-playing="isPlaying"
+              v-model:audio-src="audioUrl"
             />
            <el-dropdown @command="PageSelect">
               <el-button>
                 <span>第{{ page }}页</span><el-icon><arrow-down /></el-icon>
               </el-button>
               <template #dropdown >
-                <el-dropdown-menu @click="updateTime()">
-                  <el-dropdown-item command=1><span style="width: 100%;;text-align: center;">1</span></el-dropdown-item>
-                  <el-dropdown-item command=2><span style="width: 100%;;text-align: center;">2</span></el-dropdown-item>
-                  <el-dropdown-item command=3><span style="width: 100%;;text-align: center;">3</span></el-dropdown-item>
-                  <el-dropdown-item command=4><span style="width: 100%;;text-align: center;">4</span></el-dropdown-item>
-                  <el-dropdown-item command=5><span style="width: 100%;;text-align: center;">5</span></el-dropdown-item>
-                  <el-dropdown-item command=6><span style="width: 100%;;text-align: center;">6</span></el-dropdown-item>
-                  <el-dropdown-item command=7><span style="width: 100%;;text-align: center;">7</span></el-dropdown-item>
-                </el-dropdown-menu>
-            </template>
+                <el-input-number v-model="page" style="width: 100px;margin-left: 10px;" min="1" max="20" />
+              </template>
            </el-dropdown>
         </div>
         <div class="card-block">
@@ -172,8 +179,6 @@
               v-model="videoDialogVisible"
               title="正在生成视频"
               width="30%"
-              :close-on-click-modal="false"
-              :close-on-press-escape="false"
               :show-close="false"
               align-center
             >
@@ -210,7 +215,7 @@ import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue
 import voiceDialog from '@/components/voiceDialog/voiceDialog.vue';
 import { ElSwitch, ElButton, ElMessage } from 'element-plus';
 import { lanConfig } from '@/assets/constants';
-import { ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import type { SelectedVoice } from '@/types/voice';
 import { useAvatar } from '@/stores';
 import TransformDialog from '@/components/transformDialog/transformDialog.vue';
@@ -219,13 +224,17 @@ import router from '@/router';
 
 
 const selectedVoice = ref<SelectedVoice>({
+  type: "",
+  tags: ["普通话"],
   name: "默认",
   language: "普通话",
   avatar: useAvatar().avatarUrl,
 })
 
-const autoPlay = ref(true)
-const tryMode = ref(true)
+
+const autoPlay = ref(false)
+const tryMode = ref(false)
+const specialistMode = ref(false)
 
 const Speed = ref("");
 const Voice = ref("");
@@ -260,11 +269,47 @@ const voiceDialogVisible = ref(false)
 const videoDialogVisible = ref(false)
 const transformDialogVisible = ref(false)
 const audioVisible = ref(false)
+const isPlaying = ref(false)
+const audioUrl = computed(() => {
+  if(specialistMode.value){
+    return "DNA是主要的遗传物质_讲解视频.mp3";
+  }
+  else{
+    return "DNA是主要的遗传物质_基础视频.mp3";
+  }
+})
+
+watch(audioVisible, () => {
+  if(!audioVisible.value) {
+    isPlaying.value = false;
+    return;
+  }
+    // 生成进度
+    const progress = ref(0);
+    // 定时器
+    let timer: number = 0;
+
+    // 开始生成
+      progress.value = 0;
+
+      // 模拟生成进度
+      timer = setInterval(() => {
+        progress.value += 1;
+        if (progress.value >= 3) {
+          clearInterval(timer);
+          setTimeout(() => {
+            if(autoPlay.value){
+            isPlaying.value = true;
+          }
+          }, 100);
+        }
+      }, 100);
+})
 
 //PPT上传
 const uploadUrl = "https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
 
-const beforeUpload = (file) => {
+const beforeUpload = (file:File) => {
   // 检查文件类型
   const isPPT = file.type === "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
                 file.type === "application/vnd.ms-powerpoint";
@@ -283,25 +328,45 @@ const beforeUpload = (file) => {
 
 const newTime = ref(0)
 //用来实现变化页面然后更新时间
+watch(page, () => {
+  updateTime();
+})
 const updateTime = () => {
+  if(page.value == undefined){
+    page.value = 1;
+  }
   if(page.value == 1){
-    newTime.value = 7;
+    newTime.value = 1;
   }
   if(page.value == 2){
-    newTime.value = 15;
+    newTime.value = 2;
   }
   if(page.value == 3){
-    newTime.value = 30;
+    newTime.value = 13;
   }
   if(page.value == 4){
-    newTime.value = 45;
+    newTime.value = 33;
   }
   if(page.value == 5){
-    newTime.value = 60;
+    newTime.value = 47;
   }
   if(page.value == 6){
-    newTime.value = 75;
+    newTime.value = 65;
   }
+  if(page.value == 7){
+    newTime.value = 80;
+  }
+  if(page.value == 8){
+    newTime.value = 90;
+  }
+  if(page.value == 9){
+    newTime.value = 100;
+  }
+}
+const startTransform = () => {
+  audioVisible.value = false;
+  transformDialogVisible.value = true;
+  page.value = 1;
 }
 
 const buidVideo = () => {
@@ -313,7 +378,7 @@ const buidVideo = () => {
     // 生成进度
     const progress = ref(0);
     // 定时器
-    let timer: any = null;
+    let timer: number = 0;
 
     // 开始生成
     const startGenerating = () => {
@@ -327,9 +392,9 @@ const buidVideo = () => {
           clearInterval(timer);
           setTimeout(() => {
             isGenerating.value = false;
-          }, 500);
+          }, 100);
         }
-      }, 500);
+      }, 100);
     };
 
     // 跳转到生成历史

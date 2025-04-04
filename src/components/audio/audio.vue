@@ -3,7 +3,7 @@
     <el-button
       type="primary"
       style="width: 35px; height: 35px; border-radius: 50%;"
-      @click="togglePlay"
+      @click="isPlaying = !isPlaying"
     >
       <img src="@/assets/icons/begin.png" style="width: 1.9em;" v-if="!isPlaying">
       <img src="@/assets/icons/pause.png" style="width: 0.8em;" v-else>
@@ -21,18 +21,16 @@
 
 <script lang="ts" setup>
 import { audioUrlTest } from '@/assets/constants';
-import { ref, onMounted, watch, defineModel } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 
 const newTime = defineModel<number>();
 
 watch(newTime, () => {
-  console.log(newTime.value+"555")
   if(!newTime.value) return;
   updateTime(newTime.value)
 })
-
     // 音频播放状态
-    const isPlaying = ref(false);
+    const isPlaying = defineModel<boolean>("isPlaying");
     // 音频进度
     const progress = ref(0);
     // 当前播放时间
@@ -43,12 +41,12 @@ watch(newTime, () => {
     const audio = new Audio();
 
     // 设置要播放的本地音频文件路径
-    const audioSrc = ref(audioUrlTest[0]); // 您可以在这里指定音频文件路径
+    const audioSrc = defineModel<string>("audioSrc");
 
     // 初始化音频
     onMounted(() => {
-      audio.src = audioSrc.value;
-      console.log(audio.src)
+      if(audioSrc.value) audio.src = audioSrc.value;
+      else audio.src = audioUrlTest[0];
       audio.addEventListener('loadedmetadata', () => {
         // 获取音频总时长
         const duration = audio.duration;
@@ -60,17 +58,20 @@ watch(newTime, () => {
         progress.value = (audio.currentTime / audio.duration) * 100;
         currentTime.value = formatTime(audio.currentTime);
       });
+      audio.addEventListener('ended', () => {
+        // 重置进度
+        isPlaying.value = false;
+      });
     });
 
     // 播放/暂停切换
-    const togglePlay = () => {
+    watch(isPlaying, () => {
       if (isPlaying.value) {
-        audio.pause();
-      } else {
         audio.play();
+      } else {
+        audio.pause();
       }
-      isPlaying.value = !isPlaying.value;
-    };
+    });
 
     // 更新进度条
     const updateProgress = (value: number) => {

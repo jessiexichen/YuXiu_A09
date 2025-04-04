@@ -221,9 +221,9 @@ import { Check, Loading } from "@element-plus/icons-vue";
 import { useAvatar, useCollection } from '@/stores/index';
 
 const userInfo = ref({
-  username: "2332876536",
-  email: "2332876536@qq.com",
-  password: "123456",
+  username: "yuxiu001",
+  email: "yuxiu001@yeah.net",
+  password: "Aa12345678",
 });
 
 const restore = () => {

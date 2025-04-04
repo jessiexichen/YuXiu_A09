@@ -7,9 +7,27 @@ export const useCollectionStore = defineStore('collection', () => {
     const voices = ref<Voice[]>([
       {
         id: 1,
+        name: "调节1",
+        date: "2025/3/31",
+        group: "分组2",
+        status: "success",
+        file: null,
+        description: "总是明月几时有？把酒问青天。不知天上宫阙，今夕是何年。我……",
+      },
+      {
+        id: 2,
         name: "声音1",
-        date: "2025/2/25",
+        date: "2025/3/31",
         group: "分组1",
+        status: "success",
+        file: null,
+        description: "总是明月几时有？把酒问青天。不知天上宫阙，今夕是何年。我……",
+      },
+      {
+        id: 3,
+        name: "毕导",
+        date: "2025/3/31",
+        group: "b站up主",
         status: "success",
         file: null,
         description: "总是明月几时有？把酒问青天。不知天上宫阙，今夕是何年。我……",
@@ -17,7 +35,7 @@ export const useCollectionStore = defineStore('collection', () => {
     ]);
 
     // 分组列表
-    const groups = ref<string[]>(["分组1", "分组2"]);
+    const groups = ref<string[]>(["分组1","分组2","b站up主"]);
 
   function CollectVoice(newVoice: string , group: string) {
     voices.value.push(
@@ -33,9 +51,6 @@ export const useCollectionStore = defineStore('collection', () => {
       }
     );
     buildGroup(group);
-    console.log(voices.value);
-    console.log(groups.value);
-
   }
   function DeleteVoice(id: number): boolean {
     // 找到声音的索引
@@ -68,7 +83,6 @@ export const useCollectionStore = defineStore('collection', () => {
         name: newName,
         group: newGroup,
       });
-      console.log(voices.value);
       return true;
     }
     return false;

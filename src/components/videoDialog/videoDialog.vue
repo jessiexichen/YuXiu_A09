@@ -8,6 +8,7 @@
     <div style="display: flex; justify-content: center; align-items: center;">
       <video
         ref="videoPlayer"
+        :key="videoSrc"
         controls
         style="width: 100%; max-width: 800px; border-radius: 8px;"
       >
@@ -18,10 +19,13 @@
     </el-dialog>
 </template>
 <script lang="ts" setup>
+
 const dialogVisible = defineModel<boolean>("dialogVisible");
 const videoSrc = defineModel<string>("videoSrc");
 
 const handleClose = () => {
   dialogVisible.value = false;
+  videoSrc.value = "";
 };
+
 </script>

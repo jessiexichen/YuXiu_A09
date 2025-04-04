@@ -25,9 +25,17 @@
           <div class="upload-demo">
             <div style="margin-top: 2em; gap: 10px; display: flex">
               <record-button v-model:audio-url="audioUrl"/>
-              <el-button type="primary" class="uploading" plain>
-                <img src="@/assets/icons/upload.png" style="margin: 7px"/>点击上传
-              </el-button>
+              <el-upload
+                class="upload-demo"
+                action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                multiple
+                :limit="1"
+                style="border: none;height: 40px;"
+              >
+                <el-button type="primary" class="uploading" plain @click="uploadAudio()">
+                  <img src="@/assets/icons/upload.png" style="margin: 7px"/>点击上传
+                </el-button>
+              </el-upload>
             </div>
             <div class="upload-text" style="position: relative; top: 13%; color: #6b7280">
               可拖拽至此上传或点击上传
@@ -121,47 +129,13 @@
             type="info"
             plain
             style="width: 100%;"
-            @click="Collect()"
+            @click="collectionDialogVisible = true"
           >
             收藏声音
           </el-button>
-          <el-dialog
-            v-model="dialogVisible"
-            width="50%"
-            align-center
-            :before-close="handleClose"
-          >
-            <el-form
-              ref="formRef"
-              :model="form"
-              :rules="rules"
-              label-width="80px"
-              status-icon
-            >
-              <el-form-item label="命名" prop="name">
-                <el-input
-                  v-model="form.name"
-                  placeholder="请输入"
-                  clearable
-                ></el-input>
-              </el-form-item>
-
-              <el-form-item label="分组" prop="group">
-                <el-input
-                  v-model="form.group"
-                  placeholder="默认收藏夹"
-                  clearable
-                ></el-input>
-              </el-form-item>
-            </el-form>
-
-            <template #footer>
-            <span class="dialog-footer">
-              <el-button @click="handleClose">取消</el-button>
-              <el-button type="primary" @click="submitForm">确定</el-button>
-            </span>
-            </template>
-          </el-dialog>
+          <CollectionDialog
+            v-model="collectionDialogVisible"
+          />
         </div>
       </Card>
     </div>
@@ -172,17 +146,38 @@ import LayOut from '@/components/layouts/LayOut.vue';
 import Card from '@/components/card/CarD.vue';
 import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue';
 import { lanConfig } from '@/assets/constants';
-import { ref ,reactive } from 'vue';
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ref } from 'vue';
 import RecordButton from "@/components/recordButton/recordButton.vue";
-import { useCollection } from '@/stores';
+import CollectionDialog from '@/components/collectionDialog/collectionDialog.vue';
+import { ElMessage } from 'element-plus';
 
-
-const audioUrl = ref("")
+const audioUrl = ref()
 const isShowMore = ref(false);
 const Speed = ref("");
 const Voice = ref("");
 const Volume = ref("");
+function uploadAudio() {
+      // 生成进度
+      const progress = ref(0);
+    // 定时器
+    let timer: number = 0;
+
+    // 开始生成
+      progress.value = 0;
+
+      // 模拟生成进度
+      timer = setInterval(() => {
+        progress.value += 1;
+        if (progress.value >= 30) {
+          clearInterval(timer);
+          setTimeout(() => {
+            audioUrl.value = "上传的原音频.mp3";
+              ElMessage.success('上传成功');
+          }, 100);
+        }
+      }, 100);
+
+}
 
 function SpeedSelect(command: string) {
   Speed.value = command;
@@ -194,58 +189,7 @@ function VolumeSelect(command: string) {
   Volume.value = command;
 }
 
-function Collect() {
-  dialogVisible.value = true;
-  useCollection().buildGroup("")
-}
-const dialogVisible = ref(false);
-const formRef = ref();
-
-const  form = reactive({
-  name: "",
-  group: "",
-});
-
-const  rules = reactive({
-  name: [
-    { required: true, message: "请输入命名", trigger: "blur" },
-    { min: 1, max: 10, message: "长度在 1 到 10 个字符", trigger: "blur" },
-  ],
-  group: [
-    { required: true, message: "请输入分组", trigger: "blur" },
-    { min: 1, max: 10, message: "长度在 1 到 10 个字符", trigger: "blur" },
-  ],
-});
-
-
-const  handleClose = () => {
-  useCollection().CollectVoice(form.name, form.group);
-  dialogVisible.value = false;
-  formRef.value.resetFields();
-};
-
-const  submitForm = () => {
-formRef.value.validate((valid: boolean) => {
-  if (valid) {
-    ElMessageBox.confirm("确定要添加收藏吗？", "提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      type: "info",
-    })
-    .then(() => {
-      // 提交表单逻辑
-      ElMessage.success("收藏成功！");
-      handleClose();
-    })
-    .catch(() => {
-      ElMessage.info("已取消收藏");
-    });
-    } else {
-        ElMessage.error("表单验证失败，请检查输入内容！");
-        return false;
-      }
-  });
-};
+const collectionDialogVisible = ref(false);
 
 </script>
 <style lang="scss" scoped>
