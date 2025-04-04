@@ -43,6 +43,7 @@ const popularVoices : PopVoice[] = [
     language: "普通话",
     avatar: "src//assets/avatar/宋浩.jpg",
     description: "好，各位同学，大家上午好，今天又开始了高等数学的学习哈。",
+    sample: "语音合成/宋浩示例音频.mp3"
   },
   {
     id: 2,
@@ -50,6 +51,7 @@ const popularVoices : PopVoice[] = [
     language: "普通话",
     avatar: "src//assets/avatar/雷军.jpg",
     description: "用户满意度是根本。把所有精力放在改善产品和服务，让用户满意……",
+    sample: ""
   },
   {
     id: 3,
@@ -57,6 +59,7 @@ const popularVoices : PopVoice[] = [
     language: "普通话",
     avatar: "src/assets/avatar/奶龙.jpg",
     description: "我是奶龙，我是奶龙，我才是真正的奶龙。今夜星光闪闪，爱你的心……",
+    sample: ""
   },
   {
     id: 4,
@@ -64,6 +67,7 @@ const popularVoices : PopVoice[] = [
     language: "英语",
     avatar: "src/assets/avatar/哈利波特.jpg",
     description: "Lumos Maxima，Lumos Maxima.",
+    sample: ""
   },
   {
     id: 5,
@@ -71,6 +75,7 @@ const popularVoices : PopVoice[] = [
     language: "日语",
     avatar: "src/assets/avatar/蕾姆.jpg",
     description: "まる時間、凍る心、昴が優しく溶かし、また動き出させた……",
+    sample: ""
   },
   {
     id: 6,
@@ -78,6 +83,7 @@ const popularVoices : PopVoice[] = [
     language: "普通话",
     avatar: "src/assets/avatar/丁真.jpeg",
     description: "大家好，我是丁真。今天想跟大家分享我这里的美景...",
+    sample: ""
   },
   {
     id: 7,
@@ -85,6 +91,7 @@ const popularVoices : PopVoice[] = [
     language: "普通话",
     avatar: "src/assets/avatar/李天意.jpg",
     description: "我们接下来学习的随机变量，先学离散的，再学连续的。从简单到……",
+    sample: ""
   },
   {
     id: 8,
@@ -92,6 +99,7 @@ const popularVoices : PopVoice[] = [
     language: "普通话",
     avatar: "src/assets/avatar/学过石油的语文老师.jpg",
     description: "没文采咋办？字不好看扣分吗？作文咋提分……",
+    sample: ""
   },
   {
     id: 9,
@@ -99,6 +107,7 @@ const popularVoices : PopVoice[] = [
     language: "普通话",
     avatar: "src/assets/avatar/林志玲.jpg",
     description: "上天莫名其妙给了我知名度，我却只有一个大问号！如果是这……",
+    sample: ""
   }
 ]
 
@@ -282,7 +291,40 @@ const tranhistory: TranHistory[] = [
 ];
 
 const audioUrlTest = [
-  "Chen-U - Libertus.mp3"
+  "语音合成/普通话_男_标准_今天，我.mp3",
+  "语音合成/普通话_男_标准_今天，我_调节后.mp3",
+  "英语_男_标准_Text.mp3",
+  "广东话_男_标准_开平碉楼.mp3",
+  "四川话_男_ 标准_都江堰是.wav",
+  "上海话_男_标准_1843.wav",
+  "郑州话 _男_标准_郑州市商.wav",
+  "长沙话_男_标准_马王堆汉.mp3",
+  "天津话_男_标准_天津卫打.wav",
+  "普通话_男_温柔_同学们，.mp3",
+  "普通话_男_稚嫩_小朋友们.mp3",
+  "普通话_男_活泼_大家好！.mp3",
+  "普通话_男_激情_同学们！.mp3",
+  "普通话_男_风趣_嘿，同学.mp3",
+  "普通话_女_标准_《纸船-.mp3",
+  "普通话_ 宋浩_定理(7.mp3",
+]
+const textTest = [
+  "毓秀语音教学平台以促进教育公平、提高教学效果为主要目标，致力于打造符合教育学原理与学习者需求的语音教学产品，提供多语言多风格语音合成、辅助语言学习、构建个性化语音库、有声课件制作、音频参数调节等特色功能，将技术与应用场景相结合，增强学习体验，提高学习效果，并进一步研究其跨学科应用潜力与技术的可拓展性。",
+  "DNA是主要的遗传物质_基础视频.mp3",
+  "Text A / Lead-inHow do you celebrate Spring Festival? Write down your activities in the following table and analyze whose skill and labor are required to make these activities possible. After completing the table, share it with your partner and discuss the following two questions.1 What's the power that leads people to work and cooperate?2 What do you understand about economic life from the table?",
+  "开平碉楼融合中西建筑风格，曾用作防御土匪嘅堡垒。你知唔知道点解当时要兴建咁多碉楼？",
+  "都江堰是李冰父子修建的水利工程，让成都变成‘天府之国’。你晓得它是咋个运作的吗？",
+  "1843年上海开埠，外滩成为金融中心，十里洋场繁华一时。侬晓得当年租界是怎么划分的吗？",
+  "郑州是商朝早期的都城，甲骨文和青铜器见证了三千年历史。你知道郑州城墙遗址是咋发现的吗？",
+  "马王堆汉墓出土了完整的辛追夫人遗体和珍贵丝绸。你晓得这些丝织品为啥保存这么好吗？",
+  "天津卫设立于明朝，因漕运兴起，码头文化繁荣。你知道‘卫’在古代是啥意思吗？",
+  "同学们，今天我们一起来学习一首古诗。这首诗描绘了春天的美景，让我们闭上眼睛，想象温暖的春风轻轻拂过脸颊，花儿悄悄绽放。请大家跟着我一起朗读，感受诗中的意境。",
+  "小朋友们，今天我们来讲一个可爱的故事！从前，有一只小兔子，它最喜欢在草地上蹦蹦跳跳。一天，它遇到了一只小乌龟，他们成为了好朋友。你们想知道后来发生了什么吗？我们一起来听听吧！",
+  "大家好！欢迎来到我们的课堂！今天，我们要一起探索有趣的科学小实验。你们知道为什么有些东西能浮在水面上，而有些却会沉下去吗？让我们动手试一试，看看其中的奥秘吧！准备好了吗？那我们开始啦！",
+  "同学们！历史的长河波澜壮阔，每一次创新都推动着人类文明的进步！今天，我们将探讨一场改变世界的科技革命！让我们带着求知的热情，一起走进这段激动人心的历史！",
+  "嘿，同学们，你们有没有想过，为什么牛奶是白色的？难道奶牛只吃白色的东西？当然不是啦！今天我们就来揭秘这个有趣的科学现象，保证让你们听完后惊叹：‘原来是这样！",
+  "《纸船——寄母亲》，冰心 我从不肯妄弃了一张纸，总是留着——留着，叠成一只只很小的船儿，从舟上抛下在海里。",
+  "好，各位同学，大家上午好，今天又开始了高等数学的学习哈。",
 ]
 export {
   lanConfig,
@@ -290,7 +332,8 @@ export {
   childPages,
   popularVoices,
   tranhistory,
-  audioUrlTest
+  audioUrlTest,
+  textTest,
 }
 
 
