@@ -243,7 +243,7 @@ const handleType = (language: string) => {
     return "primary";
   }
 }
-const testNumber = 15;
+const testNumber = 18;
 const audioSrc = ref("语音合成/"+audioUrlTest[testNumber]);
 watch(selectedVoice.value, () => {
   placeholder.value = textTest[testNumber]

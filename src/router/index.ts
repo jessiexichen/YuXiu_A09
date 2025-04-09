@@ -6,7 +6,9 @@ import NewVoice from '@/views/NewVoice.vue'
 import Text2Speech from '@/views/Text2Speech.vue'
 import PPTCreation from '@/views/PPTCreation.vue'
 import TranHistory from '@/views/TranHistory.vue'
-import UserCenter from '@/views/UserCenter.vue'
+import UserCenter from '@/views/UserCenter/UserCenter.vue'
+import MyVoice from '@/views/UserCenter/childPages/MyVoice.vue'
+import MyWords from '@/views/UserCenter/childPages/MyWords.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,6 +36,18 @@ const router = createRouter({
       path: "/user-center",
       name: "个人中心",
       component: UserCenter,
+      children: [
+        {
+          path: "myvoice",
+          name: "我的声音",
+          component: MyVoice
+        },
+        {
+          path: "mywords",
+          name: "我的词库",
+          component: MyWords
+        }
+      ]
     },
     {
       path: "/tranhistory",

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue';
 import type { Voice } from '@/types/voice';
+import type { Words } from '@/types/words';
 
 export const useCollectionStore = defineStore('collection', () => {
     // 声音数据
@@ -21,7 +22,7 @@ export const useCollectionStore = defineStore('collection', () => {
         group: "分组1",
         status: "success",
         file: null,
-        description: "总是明月几时有？把酒问青天。不知天上宫阙，今夕是何年。我……",
+        description: "丙辰中秋，欢饮达旦，大醉，作此篇，兼怀子由。明月几时有？……",
       },
       {
         id: 3,
@@ -30,7 +31,7 @@ export const useCollectionStore = defineStore('collection', () => {
         group: "b站up主",
         status: "success",
         file: null,
-        description: "总是明月几时有？把酒问青天。不知天上宫阙，今夕是何年。我……",
+        description: "这个问题所有人都学过，但我答对99%的人都答不对，甚至连教材……",
       },
     ]);
 
@@ -98,4 +99,41 @@ export const useCollectionStore = defineStore('collection', () => {
   }
 
   return { voices, groups, CollectVoice, DeleteVoice, buildGroup, restoreVoice, getVoice }
+})
+
+export const useWordsStore = defineStore('words', () => {
+  const wordsStore = ref<Words[]>([
+    {
+      id: 1,
+      name: "生物",
+      data: ["染色体","DNA"," 细胞核", "伞藻", "基因", "遗传信息", "基因", "遗传物质", "假根", "性状", "遗传"],
+    },
+  ]);
+  function CollectWords(newWords: string[], name: string) {
+    wordsStore.value.find((words: Words) => {
+      if (words.name === name) {
+        words.data = newWords;
+      }
+      else {
+          wordsStore.value.push(
+          {
+            id: wordsStore.value.length + 1,
+            name: name,
+            data: newWords,
+          }
+        );
+      }
+    });
+  }
+
+  function findWords(id: number) {
+    return new Promise((resolve) => {
+      wordsStore.value.forEach((words:Words) => {
+        if (words.id === id) {
+          resolve(words);
+        }
+      });
+    });
+  }
+  return { wordsStore, CollectWords, findWords }
 })

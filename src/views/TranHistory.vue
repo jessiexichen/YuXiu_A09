@@ -8,21 +8,76 @@
           prefix-icon="Search"
           clearable
           style="width: 300px; margin-right: 10px"
-          @input="handleSearch"
         ></el-input>
         <el-select
           v-model="filterType"
           placeholder="类型筛选"
           style="width: 120px"
-          @change="handleFilter"
         >
           <el-option label="全部" value=""></el-option>
           <el-option label="语音合成" value="语音合成"></el-option>
           <el-option label="基础视频" value="基础视频"></el-option>
           <el-option label="讲解视频" value="讲解视频"></el-option>
         </el-select>
+        <el-button type="primary" style="width: 100px; margin-left: 10px;" @click="showSelection = true" v-if="!showSelection">添加词库</el-button>
+        <el-button type ="success" style="width: 100px; margin-left: 10px;" @click="showSelection = false;chartVisible = true" v-if="showSelection">统计词频</el-button>
       </div>
+      <el-dialog
+        v-model="chartVisible"
+        title="词频图"
+        width="50%"
+        height="800px"
+        align-center
+      >
+        <v-chart :option="option" style="width: 600px;height: 700px;" />
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="chartVisible = false">取消</el-button>
+            <el-button type="primary" @click="chartVisible=false;selectionVisible=true;ElMessage.success('已为您自动选择高频词')">下一步</el-button>
+          </span>
+        </template>
+      </el-dialog>
+      <el-dialog
+        v-model="selectionVisible"
+        width="500px"
+        align-center
+        :title="wordsFormRef.name+'词库'"
+      >
+        <div style="display: flex; justify-content: center; align-items: center;flex-direction: column;gap: 10px;">
+          <div style="display: flex; justify-content: start; align-items: center;width: 100%;">
+            词库名：
+            <el-input
+              v-model="wordsFormRef.name"
+              placeholder="请输入新词库名"
+              clearable
+              style="width: 50%;"
+            >
+            </el-input>
+            <el-dropdown style="margin-left: 10px;">
+              <el-button>
+                加至已有词库
+                <el-icon class="el-icon--right">
+                  <arrow-up/>
+                </el-icon>
+              </el-button>
+            </el-dropdown>
+          </div>
+          <el-input
+            type="textarea"
+            input-style="height: 400px;width: 100%;"
+            v-model="wordsFormRef.data"
+            placeholder="请输入想要收纳的词"
+          >
+          </el-input>
+        </div>
 
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="selectionVisible = false;chartVisible = true" v-if="!showSelection">上一步</el-button>
+          <el-button type="success" @click="ElMessage.success('添加成功');selectionVisible = false">确定</el-button>
+        </span>
+      </template>
+    </el-dialog>
       <div class="task-list">
         <el-card
           v-for="task in filteredTasks"
@@ -37,6 +92,12 @@
               <el-tag :type="task.status === '已完成' ? 'success' : 'warning'">
                 {{ task.status === '已完成' ? '已完成' : '生成中' }}
               </el-tag>
+              <el-checkbox
+                v-if="showSelection"
+                :v-model="selectionMap[task.content]"
+                size="large"
+                style="position: absolute;right: 2px;height: 20px;width: 20px;"
+              />
             </div>
             <div class="task-meta">
               <span v-for="tag in task.tags" :key="tag" style="color: #6B7280;">{{ tag }}</span>
@@ -76,12 +137,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed } from "vue";
 import { ElMessage } from "element-plus";
 import LayOut from "@/components/layouts/LayOut.vue";
 import VideoDialog from "@/components/videoDialog/videoDialog.vue";
-import { tranhistory } from "@/assets/constants";
-import { vi } from "element-plus/es/locales.mjs";
+import { chartData, tranhistory } from "@/assets/constants";
 
 const videoDialogVisible = ref(false);
 const videoUrl = ref("[Nekomoe kissaten][Make Heroine ga Oosugiru!][12][1080p][JPSC].mp4");
@@ -114,15 +174,19 @@ const filteredTasks = computed(() => {
   });
 });
 
-// 搜索功能
-const handleSearch = () => {
-  // 搜索框输入时触发
-};
+const selectionMap:{[key:string]:boolean} = {}
+{
+  tranhistory.forEach(task => {
+    selectionMap[task.content] = false
+  })
+}
 
-// 筛选功能
-const handleFilter = () => {
-  // 筛选状态变化时触发
-};
+const showSelection = ref(false);
+const wordsFormRef = ref({
+  name: "",
+  data: "染色体, DNA,  细胞核, 伞藻, 我们, 基因, 生物, 实验, 分子, 一个, 主要, 遗传信息, 基因, 遗传物质, 假根, 控制, 性状, 遗传, 通过, 生物体",
+});
+
 
 // 分页功能
 const handlePageChange = (page:number) => {
@@ -140,16 +204,42 @@ const downloadAudio = (url: string) => {
   document.body.removeChild(a);
 };
 
-// // 分享按钮点击事件
-// const shareAudio = (task) => {
-//   ElMessage.info(`分享 ${task.title}`);
-//   // 这里可以添加分享音频的逻辑
-// };
+
 const startPlay = (url: string) => {
   videoUrl.value = url;
-  console.log(videoUrl.value)
   videoDialogVisible.value = true;
 }
+
+
+const chartVisible = ref(false);
+const selectionVisible = ref(false);
+const option = {
+  dataset: [
+    {
+      dimensions: ['name', "score"],
+      source: chartData
+    },
+    {
+      transform: {
+        type: 'sort',
+        config: { dimension: 'score', order: 'desc' }
+      }
+    }
+  ],
+  yAxis: {
+    type: 'category',
+    axisLabel: { interval: 0, rotate: 30 },
+    inverse: true,
+  },
+  xAxis: {
+    max: 'dataMax'
+  },
+  series: {
+    type: 'bar',
+    encode: { x: 'score', y: 'name' },
+    datasetIndex: 1
+  }
+};
 </script>
 
 <style scoped>
@@ -158,6 +248,7 @@ const startPlay = (url: string) => {
 }
 
 .search-filter-bar {
+  position: relative;
   display: flex;
   align-items: center;
   margin-bottom: 20px;
@@ -176,6 +267,7 @@ const startPlay = (url: string) => {
 }
 
 .task-header {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -224,5 +316,15 @@ const startPlay = (url: string) => {
 .pagination {
   display: flex;
   justify-content: center;
+}
+
+.chart-footer {
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  background-color: #fff;
+  font-size: 14px;
+  color: #666;
 }
 </style>
