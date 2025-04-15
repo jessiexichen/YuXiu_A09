@@ -86,11 +86,6 @@
           <text style="color: #9E9E9E;">只转换前50个字符</text>
           <el-switch v-model="tryMode" />
         </div>
-        <div class="card-block" style="justify-content: center;align-items:center;gap: 55px;">
-          讲解模式
-          <text style="color: #9E9E9E;">增加额外的讲解</text>
-          <el-switch v-model="specialistMode" />
-        </div>
         <div class="card-block" style="justify-content: center;align-items:center;">
           <el-button type="primary" style="width: 55%;" @click="startTransform()">开始转换</el-button>
         </div>
@@ -234,7 +229,6 @@ const selectedVoice = ref<SelectedVoice>({
 
 const autoPlay = ref(false)
 const tryMode = ref(false)
-const specialistMode = ref(false)
 
 const Speed = ref("");
 const Voice = ref("");
@@ -271,12 +265,7 @@ const transformDialogVisible = ref(false)
 const audioVisible = ref(false)
 const isPlaying = ref(false)
 const audioUrl = computed(() => {
-  if(specialistMode.value){
-    return "DNA是主要的遗传物质_讲解视频.mp3";
-  }
-  else{
-    return "DNA是主要的遗传物质_基础视频.mp3";
-  }
+  return "DNA是主要的遗传物质_基础视频.mp3";
 })
 
 watch(audioVisible, () => {
