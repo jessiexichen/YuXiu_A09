@@ -15,7 +15,6 @@
           <el-option label="全部" value=""></el-option>
           <el-option v-for="group in useCollection().groups" :key="group" :label="group" :value="group"></el-option>
         </el-select>
-        <el-button type="primary" @click="router.push('/new-voice')">构建新声音</el-button>
       </div>
     </div>
 
@@ -100,8 +99,6 @@ clearable
 </template>
 
 <script setup lang="ts">
-
-import router from "@/router";
 import { useCollection } from "@/stores";
 import type { Voice } from "@/types/voice";
 import { Clock, Folder, Edit, Delete } from "@element-plus/icons-vue";
@@ -187,9 +184,12 @@ function handleCloseVoice(id:number, isEnsured: boolean) {
 }
 function editVoiceDialog(id: number) {
   voiceDialogVisible.value = true;
-  useCollection().getVoice(id).then((voice: Voice) => {
-    voiceFormRef.value.name = voice.name;
-    voiceFormRef.value.group = voice.group;
+  useCollection().getVoice(id).then((voice) => {
+    const typedVoice = voice as Voice;
+    if (typedVoice) {
+      voiceFormRef.value.name = typedVoice.name;
+      voiceFormRef.value.group = typedVoice.group;
+    }
   });
 }
 </script>

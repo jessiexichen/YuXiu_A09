@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginPage from '@/views/LoginPage.vue'
 import Home from '@/views/HomePage.vue'
 import RegisterPage from '@/views/RegisterPage.vue'
-import NewVoice from '@/views/NewVoice.vue'
 import Text2Speech from '@/views/Text2Speech.vue'
 import PPTCreation from '@/views/PPTCreation.vue'
 import TranHistory from '@/views/TranHistory.vue'
@@ -53,11 +52,6 @@ const router = createRouter({
       path: "/tranhistory",
       name: "转录历史",
       component: TranHistory,
-    },
-    {
-      path: "/new-voice",
-      name: "构建声音",
-      component: NewVoice
     },
     {
       path: "/text-to-speech",

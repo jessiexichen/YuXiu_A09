@@ -10,16 +10,7 @@
       <div
         class="card-block input"
       >
-        <ElInput size="large" maxlength="23" placeholder="请输入邮箱地址" v-model="email">
-          <template #append>
-            <ElButton
-              @click="getEmailCode"
-            >
-              发送验证码
-            </ElButton>
-          </template>
-        </ElInput>
-        <ElInput size="large" maxlength="10" placeholder="请输入验证码" v-model="emailCode" />
+        <ElInput size="large" maxlength="23" placeholder="请输入邮箱地址" v-model="email" />
         <ElInput size="large" maxlength="23" type="password" placeholder="请输入密码" v-model="password" :show-password="true" />
         <ElInput size="large" maxlength="23" type="password" placeholder="请输入确认密码" v-model="passwordAgain" :show-password="true" />
       </div>
@@ -49,12 +40,7 @@ import { ref } from 'vue';
 const password = ref(undefined)
 const passwordAgain = ref(undefined)
 const email = ref(undefined)
-const emailCode = ref(undefined)
 const initial = ref(undefined)
-
-function getEmailCode() {
-  ElMessage.success("发送成功")
-}
 
 function register() {
   ElMessage.success("注册成功")
