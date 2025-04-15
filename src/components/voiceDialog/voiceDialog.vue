@@ -29,46 +29,6 @@
               </el-button>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="热门人物声音" name="popular">
-            <div class="search-filter" style="margin-bottom: 10px;">
-              <el-input v-model="searchQuery" placeholder="搜索" prefix-icon="Search" clearable
-                style="width: 70%; margin-right: 10px"></el-input>
-              <span>语言</span>
-              <el-select v-model="selectedLanguage1" placeholder="选择语言" style="width: 20%; margin-left: 10px" clearable>
-                <el-option label="普通话" value="普通话"></el-option>
-                <el-option label="英语" value="英语"></el-option>
-                <el-option label="日语" value="日语"></el-option>
-              </el-select>
-            </div>
-            <el-scrollbar height="600px">
-              <div class="voice-list">
-                <el-card v-for="voice in filteredPopularVoices" :key="voice.id" class="voice-item" shadow="hover">
-                  <div class="voice-content">
-                    <el-avatar :size="50">
-                      <img :src=voice.avatar />
-                    </el-avatar>
-                    <div class="voice-info">
-                      <div class="voice-name">
-                        {{ voice.name }}
-                        <el-tag :type="handleType(voice.language)" size="small" style="position: relative;left: 2%;">{{
-                          voice.language }}</el-tag>
-                      </div>
-                      <div class="voice-description">
-                        <img src="@/assets/icons/play.png" style="width: 1em;height: 1.2em;cursor: pointer;" @click="playVoice(voice.sample, voice.id);" v-if="isPlaying !== voice.id">
-                        <img src="@/assets/icons/pause2.png" style="width: 1.1em;height: 1.1em;cursor: pointer;"  v-else>
-                        <span style="position: relative;bottom: 3px;left: 10px;">{{ voice.description }}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="voice-use">
-                    <el-button type="primary" size="default" @click="usePopVoice(voice)">
-                      使用声音
-                    </el-button>
-                  </div>
-                </el-card>
-              </div>
-            </el-scrollbar>
-          </el-tab-pane>
           <el-tab-pane label="我的声音" name="my-voices">
             <div class="search-filter" style="margin-bottom: 10px;">
               <el-input v-model="searchQuery" placeholder="搜索" prefix-icon="Search" clearable
@@ -114,11 +74,11 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { popularVoices, lanConfig } from "@/assets/constants";
+import { lanConfig } from "@/assets/constants";
 import DropDownSelector from '@/components/dropDownSelecter/dropDownSelector.vue';
 import { useAvatar, useCollection } from "@/stores";
 import router from "@/router";
-import type { PopVoice, Voice } from "@/types/voice";
+import type { Voice } from "@/types/voice";
 import type { SelectedVoice } from "@/types/voice";
 import { ElMessage } from "element-plus";
 
@@ -128,7 +88,7 @@ const selectedVoice = defineModel<SelectedVoice>("selectedVoice");
 const dialogVisible = defineModel<boolean>("dialogVisible");
 
 // 当前选中的标签
-const activeTab = ref("popular");
+const activeTab = ref("basic");
 
 // 关闭对话框
 const handleClose = () => {
@@ -141,7 +101,6 @@ const handleClose = () => {
 
 // 使用声音
 function useNormVoice() {
-
   if (!selectedVoice.value) return;
   if(selectedVoice.value.tags) selectedVoice.value.tags = [];
 
@@ -164,15 +123,7 @@ function useNormVoice() {
   selectedVoice.value.type = "normal";
   handleClose();
 }
-function usePopVoice(voice: PopVoice) {
-  if(selectedVoice.value?.type) selectedVoice.value.type = "";
 
-  if (!selectedVoice.value) return;
-  selectedVoice.value.name = voice.name;
-  selectedVoice.value.language = voice.language;
-  selectedVoice.value.avatar = voice.avatar;
-  handleClose();
-};
 function useMyVoice(voice: Voice) {
   if(selectedVoice.value?.type) selectedVoice.value.type = "";
 
@@ -182,49 +133,9 @@ function useMyVoice(voice: Voice) {
   selectedVoice.value.avatar = useAvatar().avatarUrl;
   handleClose();
 };
+
 const selectedLanguage = ref({language: undefined, localLanguage: undefined, langType: undefined, sex: undefined});
-const selectedLanguage1 = ref("")
 const searchQuery = ref("")
-
-const handleType = (language: string) => {
-  if (language === "普通话") {
-    return "success";
-  } else if (language === "日语") {
-    return "warning";
-  } else if (language === "英语") {
-    return "primary";
-  }
-}
-const isPlaying = ref<number>();
-function playVoice(audioUrl: string, id: number) {
-  isPlaying.value = id;
-  const audio = new Audio();
-  audio.src = audioUrl;
-  audio.play();
-  let timer: number = 0;
-  timer = setInterval(() => {
-    if (audio.currentTime >= audio.duration) {
-      clearInterval(timer);
-      setTimeout(() => {
-        audio.src = "";
-        isPlaying.value = undefined;
-      }, 100);
-    }
-  }, 1000);
-}
-
-const filteredPopularVoices = computed(() => {
-  return popularVoices.filter((voice) => {
-    if (voice.language !== selectedLanguage1.value && selectedLanguage1.value !== "") {
-      return false;
-    }
-    else if (!voice.name.includes(searchQuery.value)) {
-      return false;
-    }
-    return true
-  });
-});
-
 const filterGroup = ref("");
 
 const filteredPopularVoices_my = computed(() => {
@@ -276,57 +187,5 @@ const filteredPopularVoices_my = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 15px;
-}
-
-.voice-item {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-}
-
-
-.voice-content {
-  display: flex;
-  gap: 10px;
-  width: 100%;
-
-  .voice-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-right: 15px;
-  }
-
-  .voice-info {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-}
-
-.voice-use {
-  display: flex;
-
-  button {
-    position: relative;
-    left: 7%;
-  }
-}
-
-
-
-
-.voice-name {
-  font-weight: 500;
-  margin-bottom: 5px;
-  display: flex;
-  align-items: center;
-}
-
-.dialog-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
 }
 </style>
