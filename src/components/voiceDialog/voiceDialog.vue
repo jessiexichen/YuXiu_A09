@@ -10,10 +10,6 @@
               <DropDownSelector :visible-selection="lanConfig.visibleLanguages" :has-more="true"
                 :all-selection="lanConfig.allLanguages" v-model="selectedLanguage.language" />
             </div>
-            <div class="basic-language" style="padding-right: 0;" v-if="selectedLanguage.language === '中文'">
-              <div class="block-title">方言</div>
-              <DropDownSelector :visible-selection="lanConfig.localLanguage" :has-more="false" v-model="selectedLanguage.localLanguage" />
-            </div>
             <div class="basic-language">
               <div class="block-title">风格</div>
               <DropDownSelector :visible-selection="lanConfig.langType" :has-more="false" v-model="selectedLanguage.langType" />
@@ -94,7 +90,6 @@ const activeTab = ref("basic");
 const handleClose = () => {
   dialogVisible.value = false;
   selectedLanguage.value.langType = undefined;
-  selectedLanguage.value.localLanguage = undefined;
   selectedLanguage.value.language = undefined;
   selectedLanguage.value.sex = undefined;
 };
@@ -111,13 +106,7 @@ function useNormVoice() {
   if(selectedLanguage.value.langType === undefined) {ElMessage.error("有未选择的tag");return;}
   if(selectedLanguage.value.sex === undefined) {ElMessage.error("有未选择的tag");return;}
   selectedVoice.value.type = "normal";
-  if(selectedLanguage.value.language === "中文") {
-    if(selectedLanguage.value.localLanguage === undefined) {ElMessage.error("有未选择的tag");return;}
-    selectedVoice.value.tags.push(selectedLanguage.value.localLanguage);
-  }
-  else {
-    selectedVoice.value.tags.push(selectedLanguage.value.language);
-  }
+  selectedVoice.value.tags.push(selectedLanguage.value.language);
   selectedVoice.value.tags.push(selectedLanguage.value.langType, selectedLanguage.value.sex);
 
   selectedVoice.value.type = "normal";
@@ -134,7 +123,7 @@ function useMyVoice(voice: Voice) {
   handleClose();
 };
 
-const selectedLanguage = ref({language: undefined, localLanguage: undefined, langType: undefined, sex: undefined});
+const selectedLanguage = ref({language: undefined, langType: undefined, sex: undefined});
 const searchQuery = ref("")
 const filterGroup = ref("");
 
@@ -172,6 +161,7 @@ const filteredPopularVoices_my = computed(() => {
   width: 100%;
   grid-template-columns: 1fr 9fr;
   padding: 10px 0 5px 10px;
+  margin-bottom: 5px;
 }
 
 .select-language {
